@@ -1,0 +1,1 @@
+export const dataHomeMenu = { id: 1, link: '/', name: 'Home' };
