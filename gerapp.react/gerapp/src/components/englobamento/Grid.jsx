@@ -10,11 +10,14 @@ import { deleteItem } from '../../data/cadastros/CrudGeneric';
 import Refresh from '../utils/Refresh';
 import Verdadeiro from './Verdadeiro';
 import Falso from './Falso';
+import Modal from '../modal/Modal';
 
 const Grid = ({ itens, redirect, columns, filterEntry, link }) => {
 
     const [inputValue, setInputValue] = useState('');
     const [filter, setFilter] = useState('');
+    const [open, setOpen] = useState(false);
+    const [id, setId] = useState(0);
 
     const handleInputChange = (e) => {
         setInputValue(e.target.value);
@@ -39,11 +42,30 @@ const Grid = ({ itens, redirect, columns, filterEntry, link }) => {
         return [...new Set(allKeys)];
     };
 
+    const formatItens = (item) => {
+        if (typeof item === 'boolean') {
+            return item ? <Verdadeiro /> : <Falso />
+        } else if (typeof item === 'number')
+            return `R$ ${item.toFixed(2)}`
+        else {
+            return item;
+        }
+    };
+
+    const COMFIRM_BUTTON_STYLED = {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '20px',
+        paddingTop: '10px'
+    }
+
     const itemDelete = async (id) => {
         try {
             let response = await deleteItem({ link, id });
             Refresh();
             console.log(response);
+            setOpen(!open);
         } catch (error) {
             console.error(`Error deleting item with id ${id}:`, error);
         }
@@ -88,15 +110,15 @@ const Grid = ({ itens, redirect, columns, filterEntry, link }) => {
                     <tbody>
                         {filteredItens.map((item) => (
                             <tr key={item.id}>
-                                <td className='hidden' >{typeof item[filteredKeys[0]] === 'boolean' ? item[filteredKeys[0]] ? <Verdadeiro /> : <Falso /> : item[filteredKeys[0]]}</td>
-                                <td style={{ fontWeight: '500' }}>{typeof item[filteredKeys[1]] === 'boolean' ? item[filteredKeys[1]] ? <Verdadeiro /> : <Falso /> : item[filteredKeys[1]]}</td>
-                                <td style={{ fontWeight: '500' }}>{typeof item[filteredKeys[2]] === 'boolean' ? item[filteredKeys[2]] ? <Verdadeiro /> : <Falso /> : item[filteredKeys[2]]}</td>
-                                <td style={{ fontWeight: '500' }}>{typeof item[filteredKeys[3]] === 'boolean' ? item[filteredKeys[3]] ? <Verdadeiro /> : <Falso /> : item[filteredKeys[3]]}</td>
-                                <td style={{ fontWeight: '500' }}>{typeof item[filteredKeys[4]] === 'boolean' ? item[filteredKeys[4]] ? <Verdadeiro /> : <Falso /> : item[filteredKeys[4]]}</td>
+                                <td className='hidden' >{formatItens(item[filteredKeys[0]])}</td>
+                                <td style={{ fontWeight: '500' }}>{formatItens(item[filteredKeys[1]])}</td>
+                                <td style={{ fontWeight: '500' }}>{formatItens(item[filteredKeys[2]])}</td>
+                                <td style={{ fontWeight: '500' }}>{formatItens(item[filteredKeys[3]])}</td>
+                                <td style={{ fontWeight: '500' }}>{formatItens(item[filteredKeys[4]])}</td>
                                 <td className='option-grid'>
                                     <div>
-                                        <Button href='#' variant='outline-success'><CiEdit /></Button>
-                                        <Button href='#' variant='outline-danger' onClick={() => itemDelete(item.id)}><FaRegTrashAlt /></Button>
+                                        <Button variant='outline-success'><CiEdit /></Button>
+                                        <Button variant='outline-danger' onClick={() => { setOpen(!open), setId(item.id) }}><FaRegTrashAlt /></Button>
                                     </div>
                                 </td>
                             </tr>
@@ -104,6 +126,15 @@ const Grid = ({ itens, redirect, columns, filterEntry, link }) => {
                     </tbody>
                 </Table>
             </div >
+            <Modal isOpen={open} setModalOpen={() => setOpen(!open)}>
+                <div>
+                    <h3>Deseja Excluir o item?</h3>
+                </div>
+                <div style={COMFIRM_BUTTON_STYLED}>
+                    <Button variant='outline-success' onClick={() => itemDelete(id)}>Excluir</Button>
+                    <Button variant='outline-danger' onClick={() => setOpen(!open)}>Cancelar</Button>
+                </div>
+            </Modal>
         </>
     );
 }
