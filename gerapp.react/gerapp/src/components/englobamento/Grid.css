@@ -1,13 +1,43 @@
 .global-main-grid {
-    width: 85dvw;
-    height: 85dvh;
-    margin: 0 auto;
-    margin-top: 2rem;
     border-radius: 5px;
     -webkit-box-shadow: 10px 4px 55px -28px rgba(99, 96, 99, 1);
     -moz-box-shadow: 10px 4px 55px -28px rgba(99, 96, 99, 1);
     box-shadow: 10px 4px 55px -28px rgba(99, 96, 99, 1);
-    overflow-x: hidden;
+}
+
+.relative {
+    width: 100dvw;
+    height: 4rem;
+    margin: 0 auto;
+    position: relative;
+}
+
+.valida-verdadeiro {
+    background-color: #3dbf06;
+    width: 40px;
+    text-align: center;
+    font-weight: bold;
+    color: #fff;
+    height: 25px;
+    margin: 0 auto;
+    border-radius: 5px;
+}
+
+.valida-false {
+    background-color: #ad300a;
+    width: 40px;
+    text-align: center;
+    font-weight: bold;
+    color: #fff;
+    height: 25px;
+    margin: 0 auto;
+    border-radius: 5px;
+}
+
+.fixed {
+    background-color: #ffffff;
+    width: 100%;
+    position: fixed;
 }
 
 @media(max-width: 1900px) {

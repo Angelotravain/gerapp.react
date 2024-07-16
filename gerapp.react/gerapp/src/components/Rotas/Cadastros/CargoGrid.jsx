@@ -5,11 +5,12 @@ import Loading from '../../loading/Loading';
 import ImagemErro from '../../loading/ImagemErro';
 import { getItens } from '../../../data/cadastros/CrudGeneric';
 
-const ClienteGrid = () => {
-    const [clientes, setClientes] = useState([]);
+const CargoGrid = () => {
+
+    const [cargos, setCargos] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const link = 'https://localhost:4441/api/v1/gerapp/Cliente';
+    const link = 'https://localhost:4441/api/v1/gerapp/Cargo';
 
 
     console.log(link);
@@ -17,7 +18,7 @@ const ClienteGrid = () => {
         const fetchData = async () => {
             try {
                 const data = await getItens({ link });
-                setClientes(data);
+                setCargos(data);
             } catch (err) {
                 setError(err);
             } finally {
@@ -27,13 +28,14 @@ const ClienteGrid = () => {
 
         fetchData();
     }, []);
+
     if (loading) return <Loading />;
     if (error) return <ImagemErro />
 
 
     return (
-        <Grid itens={clientes} redirect={'/Cliente'} columns={['id', 'Nome', 'E-mail', 'cpf', 'telefone']} filterEntry={'nome'} link={link} />
+        <Grid itens={cargos} redirect={'/Cliente'} columns={['id', 'Descrição', 'Acessa cadastros', 'Acessa financeiro', 'Acessa locação']} filterEntry={'descricao'} link={link} />
     )
 }
 
-export default ClienteGrid
+export default CargoGrid

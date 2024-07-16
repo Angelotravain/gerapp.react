@@ -1,19 +1,22 @@
-import { getBairros } from '../../../data/cadastros/BairroCadastro';
 import Grid from '../../englobamento/Grid'
 import { useState, useEffect } from 'react'
+import Loading from '../../loading/Loading';
+import ImagemErro from '../../loading/ImagemErro';
+import { getItens } from '../../../data/cadastros/CrudGeneric';
 
-// Esse valor vai vir da API
 const BairroGrid = () => {
 
     const [bairros, setBairros] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const link = 'https://localhost:4441/api/v1/gerapp/Bairro'
+    const link = 'https://localhost:4441/api/v1/gerapp/Bairro';
 
+
+    console.log(link);
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const data = await getBairros({ link });
+                const data = await getItens({ link });
                 setBairros(data);
             } catch (err) {
                 setError(err);
@@ -25,8 +28,8 @@ const BairroGrid = () => {
         fetchData();
     }, []);
 
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error: {error.message}</p>;
+    if (loading) return <Loading />;
+    if (error) return <ImagemErro />
 
 
     return (

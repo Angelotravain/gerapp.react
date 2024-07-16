@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const getBairros = async ({ link }) => {
+export const getItens = async ({ link }) => {
     try {
         const response = await axios.get(link);
         return response.data;

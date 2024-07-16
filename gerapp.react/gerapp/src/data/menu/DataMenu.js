@@ -4,7 +4,6 @@ export const dataCadastroMenus = [
     { id: 3, link: '/Cliente', name: 'Clientes' },
     { id: 4, link: '/Empresa', name: 'Empresas' },
     { id: 5, link: '/Funcionario', name: 'Funcionários' },
-    { id: 6, link: '/Usuario', name: 'Usuários' },
 ];
 
 export const dataFinanceiroMenus = [
