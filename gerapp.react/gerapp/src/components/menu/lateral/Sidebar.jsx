@@ -1,4 +1,3 @@
-import './Sidebar.css';
 import { SideBarStyledWrapper, ContainerCloseMenu, ContainerSideMenuStyled, CloseIcon, Dashboard, MenuSidebarStyledComponent } from './Sidebar.module'
 import SubMenu from './SubMenu';
 
