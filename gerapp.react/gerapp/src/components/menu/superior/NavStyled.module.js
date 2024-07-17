@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-
+import { FiMenu } from "react-icons/fi";
 
 export const DivInternStyledComponent = styled.div`
     display: flex;
