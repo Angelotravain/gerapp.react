@@ -2,6 +2,7 @@ import React from 'react';
 import { FiMenu } from "react-icons/fi";
 import { FaShoppingCart } from "react-icons/fa";
 import { FaRocketchat } from "react-icons/fa";
+import { DivInternStyledComponent, NavStyledWrapper } from './NavStyled.module'
 
 
 const OPEN_MENU_STYLED = {
@@ -21,28 +22,15 @@ const ACTION_BUTTON_END = {
     cursor: 'pointer',
 }
 
-const STYLED_COMPONENT = {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between'
-}
-
-const NAV_STYLED = {
-    backgroundColor: '#2d2d2d',
-    borderBottom: '1px solid #3d3d3d',
-    display: 'block',
-    zIndex: '0'
-}
-
 const Navbar = ({ toggleSidebar }) => {
     return (
-        <nav style={NAV_STYLED}>
-            <div style={STYLED_COMPONENT}>
+        <NavStyledWrapper>
+            <DivInternStyledComponent>
                 <FiMenu style={OPEN_MENU_STYLED} onClick={toggleSidebar} />
                 <FaShoppingCart style={ACTION_BUTTON_END} />
                 <FaRocketchat style={ACTION_BUTTON_END} />
-            </div>
-        </nav>
+            </DivInternStyledComponent>
+        </NavStyledWrapper>
     )
 }
 

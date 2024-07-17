@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
 import { IoIosArrowDown } from "react-icons/io";
-import './Dropdown.css'
+import { IoIosArrowForward } from "react-icons/io";
+import {
+    ButtonDropDownStyled,
+    ListDropDrawer,
+    DropWrapper,
+    ListInternalDropDown
+} from './Dropdown.module';
 
-const Dropdown = ({ children, title }) => {
+const Dropdown = ({ children, title, icon }) => {
 
     const [open, setOpen] = useState(true);
 
@@ -11,14 +17,16 @@ const Dropdown = ({ children, title }) => {
     };
 
     return (
-        <ul className={`${open ? 'open' : ''}`}>
-            <li onClick={toggleDropdown}>
-                <a className='space' href="#"><span>{title}</span> <span ><IoIosArrowDown /></span></a>
-                <ul className={`${open ? 'display-none' : ''}`}>
+        <DropWrapper onClick={toggleDropdown}>
+            <ListDropDrawer>
+                <ButtonDropDownStyled>
+                    <div>{icon}{title}{open ? <IoIosArrowForward /> : <IoIosArrowDown />}</div>
+                </ButtonDropDownStyled>
+                <ListInternalDropDown isOpen={open}>
                     {children}
-                </ul>
-            </li>
-        </ul>
+                </ListInternalDropDown>
+            </ListDropDrawer>
+        </DropWrapper>
     )
 }
 
