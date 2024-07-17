@@ -17,14 +17,14 @@ export const ButtonDropDownStyled = styled.a`
     width: 100%;
 
     div{
-        color: #fff;
+        color: ${props => props.theme.colors.texto};
         display: flex;
         flex-direction: row;
         justify-content: space-around;
     }
 
             &:hover{
-            background-color: #3d3d3d;
+            background-color: ${props => props.theme.colors.hover};
         }
 `;
 

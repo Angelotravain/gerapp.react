@@ -33,7 +33,7 @@ const BairroGrid = () => {
 
 
     return (
-        <Grid itens={bairros} redirect={'/Cliente'} columns={['id', 'Nome', 'Valor frete', 'Isenta frete', 'Cidade']} filterEntry={'nome'} link={link} />
+        <Grid /> //itens={bairros} redirect={'/Cliente'} columns={['id', 'Nome', 'Valor frete', 'Isenta frete', 'Cidade']} filterEntry={'nome'} link={link} />
     )
 }
 

@@ -1,15 +1,22 @@
 import React from 'react'
 import Dropdown from '../dropdown/Dropdown';
 import Link from '../dropdown/Link';
-import { dataCadastroMenus, dataFinanceiroMenus, dataLocacaoMenus } from '../../../data/menu/DataMenu';
-import { MdInsertEmoticon } from "react-icons/md";
-import { HiCash } from "react-icons/hi";
-import { FaTruckPickup } from "react-icons/fa";
+import {
+    dataCadastroMenus,
+    dataFinanceiroMenus,
+    dataLocacaoMenus,
+} from '../../../data/menu/DataMenu';
+import {
+    IconCadastroStyled,
+    IconFinanceiroStyled,
+    IconLocacaoStyled
+}
+    from './Sidemenu.module'
 
 export default function SubMenu() {
     return (
         <>
-            <Dropdown title={'Cadastros'} icon={<MdInsertEmoticon />}>
+            <Dropdown title={'Cadastros'} icon={<IconCadastroStyled />}>
                 {dataCadastroMenus.map((menu) => (
                     <Link
                         key={menu.id}
@@ -18,7 +25,7 @@ export default function SubMenu() {
                     />
                 ))}
             </Dropdown>
-            <Dropdown title={'Financeiro'} icon={<HiCash />}>
+            <Dropdown title={'Financeiro'} icon={<IconFinanceiroStyled />}>
                 {dataFinanceiroMenus.map((menu) => (
                     <Link
                         key={menu.id}
@@ -27,7 +34,7 @@ export default function SubMenu() {
                     />
                 ))}
             </Dropdown>
-            <Dropdown title={'Locação'} icon={<FaTruckPickup />}>
+            <Dropdown title={'Locação'} icon={<IconLocacaoStyled />}>
                 {dataLocacaoMenus.map((menu) => (
                     <Link
                         key={menu.id}

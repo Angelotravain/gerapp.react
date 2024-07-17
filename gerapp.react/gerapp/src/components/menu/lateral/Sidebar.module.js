@@ -7,16 +7,16 @@ export const SideBarStyledWrapper = styled.div`
     position: fixed;
     width: 250px;
     height: 100%;
-    background-color: #2d2d2d;
-    color: #fff;
+    background-color: ${props => props.theme.colors.fundo};
+    color: ${props => props.theme.colors.texto};
     transition: transform 0.3s ease-in-out;
     z-index: 1000;
     transform: ${(props) => (props.isOpen ? 'translateX(0)' : 'translateX(-100%)')};
 `;
 
 export const ContainerCloseMenu = styled.div`
-    border-bottom: 1px solid #3d3d3d;
-    border-right: 1px solid #3d3d3d;
+    border-bottom: ${props => props.theme.colors.bottom};
+    border-right: ${props => props.theme.colors.bottom};
     display: flex;
     align-items: center;
     justify-content: start;
@@ -43,7 +43,7 @@ export const Dashboard = styled(MdDashboard)`
     font-size: 3rem;
     padding: 5px;
     display: inline-block;
-    color: #fff;
+    color: ${props => props.theme.colors.texto};
 `;
 export const MenuSidebarStyledComponent = styled.div`
     padding: .7rem;
@@ -57,7 +57,7 @@ export const MenuSidebarStyledComponent = styled.div`
     flex-direction: row;
 
     a{
-        color: #fff;
+        color: ${props => props.theme.colors.texto};
         text-decoration: none;
         width: 100%;
         padding: 10px;
@@ -68,6 +68,6 @@ export const MenuSidebarStyledComponent = styled.div`
     }
 
     &:hover{
-        background-color: #3d3d3d;
+        background-color: ${props => props.theme.colors.hover};
     }
 `;

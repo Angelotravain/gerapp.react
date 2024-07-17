@@ -25,6 +25,7 @@ import styled from 'styled-components'
 const AppWrapper = styled.div`
     display: flex;
     flex-direction: column;
+    width: 100dvw;
     height: 100dvh;
 `;
 
@@ -36,7 +37,7 @@ const App = () => {
   };
 
   return (
-    <AppWrapper className="app">
+    <AppWrapper>
       <Navbar toggleSidebar={toggleSidebar} />
       <Sidebar isOpen={isOpen} toggleSidebar={toggleSidebar} />
       <MainRoute isOpen={isOpen} />
