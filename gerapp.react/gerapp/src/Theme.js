@@ -9,5 +9,6 @@ export const theme = {
         success: '#3EA621',
         warning: '#E3A11E',
         error: '#FA170F',
+        rgbWaring: 'rgb(227,161,30,0.2)',
     }
 }
