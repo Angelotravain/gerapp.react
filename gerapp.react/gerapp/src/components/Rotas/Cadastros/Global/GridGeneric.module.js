@@ -123,13 +123,13 @@ export const IconAddItemStyled = styled(IoAddOutline)`
 `;
 
 export const TableHeaderItenStyled = styled.th`
-    @media(max-width: 400px){
+    @media(max-width: 480px){
         display: none;
     }
 `;
 
 export const TableDataItenStyled = styled.th`
-    @media(max-width: 400px){
+    @media(max-width: 480px){
         display: none;
     }
 `;
@@ -145,37 +145,44 @@ export const WarningSpanStyled = styled.div`
     background-color: ${props => props.theme.colors.warning};
     width: 85%;
     border-radius: 10px;
-    height: 80px;
+    height: 120px;
     margin: 0 auto;
     margin-top: 5px;
     color: ${props => props.theme.colors.texto};
     align-items: center;
     justify-content: center;
-    padding: 10px;
     gap: 10px;
     flex-direction: column;
-    font-size: 20px;
-
+    font-size: 2rem;
+    box-shadow: 0 0 5px ${props => props.theme.colors.warning};
     div{
         display: flex;
-        gap: 10px;
         align-items: center;
         justify-content: center;
-
-        button{
-                color: ${props => props.theme.colors.texto};
-                width: 80px;
-                height: 40px;
-                font-size: 15px;
-                padding: 5px;
-                font-weight: bold;
-                border-radius: 5px;
-                background-color: ${props => props.theme.colors.fundo};
-                border: none;
-
-                &:hover{
-                    opacity: .7;
-                }
-        }
+        margin-bottom: 20px;
     }
+`;
+
+export const TrStyled = styled.tr`
+    background-color: ${props => props.theme.colors.fundo};
+    color: ${props => props.theme.colors.texto};
+`;
+
+export const TrBodyStyled = styled.tr`
+    color: ${props => props.theme.colors.fundo};
+    `;
+
+export const DivGlobal = styled.div`
+    width: 80%;
+    margin: 0 auto;
+`;
+
+export const SelectStyled = styled.select`
+        margin: 5px;
+        font-size: 15px; 
+        border: none;
+        font-family: sans-serif;
+        background-color: ${props => props.theme.colors.fundo};
+        color: ${props => props.theme.colors.texto};
+        display: ${props => props.open ? 'none' : 'block'};
 `;

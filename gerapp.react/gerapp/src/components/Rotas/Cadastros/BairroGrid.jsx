@@ -11,21 +11,38 @@ import {
     IconAddItemStyled,
     WarningSpanStyled,
     TableDataItenStyled,
-    TableHeaderItenStyled
+    TableHeaderItenStyled,
+    DivGlobal,
+    TrStyled,
+    SelectStyled,
+    TrBodyStyled
 } from './Global/GridGeneric.module.js';
 import Loading from '../../loading/Loading.jsx';
 import ImagemErro from '../../loading/ImagemErro';
 import Refresh from '../../utils/Refresh.jsx';
 import {
     getItens,
-    deleteItem
-} from '../../../data/cadastros/CrudGeneric.jsx';
-
-
+    deleteItem,
+    getItensById
+} from '../../data/cadastros/CrudGeneric.jsx';
+import TBody from '../../Genericos/TBody.jsx'
+import { useNavigate } from 'react-router-dom';
+import ModalForm from '../../Formularios/ModalForm.jsx';
+import FormBairroFields from '../../CamposFormularios/FormBairroFields.jsx'
+import {
+    IconsCheckStyled,
+    IconNoCheckedStyled
+} from '../../IconsStyled.module.js'
+import { ButtonStyled } from '../../Genericos/Button.module.js';
+import {
+    IconSavedStyled,
+    IconCancelStyled
+} from '../../IconsStyled.module.js'
 
 const BairroGrid = () => {
     const [bairros, setBairros] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [isOpenModal, setOpenModal] = useState(false);
     const [error, setError] = useState('');
     const [selectPage, setSelectPage] = useState(20);
     const quantidadeItensPage = [5, 10, 15, 20, 50];
@@ -35,10 +52,9 @@ const BairroGrid = () => {
     const [bairrosFiltrados, setBairrosFiltrados] = useState([]);
     const [id, setId] = useState(0);
     const link = 'Bairro';
+    const city = 'Cidade';
 
-    useEffect(() => {
-        setBairrosFiltrados(bairrosRefatorados());
-    }, [filter, bairros]);
+    const navigate = useNavigate();
 
     const handleInputChange = (e) => {
         const value = e.target.value;
@@ -75,27 +91,31 @@ const BairroGrid = () => {
         const fetchData = async () => {
             try {
                 const data = await getItens({ link });
+                setBairrosFiltrados(bairrosRefatorados());
                 setBairros(data);
+
             } catch (err) {
                 setError(err);
             } finally {
                 setLoading(false);
             }
         };
-
         fetchData();
-    }, []);
+    }, [filter, bairros]);
 
     if (loading) return <Loading />;
     if (error) return <ImagemErro />;
 
     return (
         <div>
+            <ModalForm isOpen={isOpenModal} setOpenModal={setOpenModal}>
+                <FormBairroFields idEdit={id} />
+            </ModalForm>
             <WarningSpanStyled style={{ display: open ? 'flex' : 'none' }}>
                 <p>Deseja realmente excluir o item?</p>
                 <div>
-                    <button onClick={() => itemDelete(id)}>Sim</button>
-                    <button onClick={() => setOpen(false)}>Cancelar</button>
+                    <ButtonStyled onClick={() => itemDelete(id)}><IconSavedStyled /></ButtonStyled>
+                    <ButtonStyled onClick={() => setOpen(false)}><IconCancelStyled /></ButtonStyled>
                 </div>
             </WarningSpanStyled>
             <DivWarpperTextAlign>
@@ -108,13 +128,13 @@ const BairroGrid = () => {
                         onKeyPress={handleKeyPress}
                     />
                     <IconSearchStyled onClick={() => handleInputChange} />
-                    <IconAddItemStyled />
+                    <IconAddItemStyled onClick={() => { setId(0), setOpenModal(!isOpenModal) }} />
                 </DivWarpperTextFixed>
             </DivWarpperTextAlign>
-            <div>
+            <DivGlobal>
                 <TableStyledWraper>
                     <thead>
-                        <tr style={{ backgroundColor: 'gray', color: '#fff' }}>
+                        <TrStyled>
                             <th style={{ display: 'none' }}>
                                 <DivWarpper>
                                     <InputCheckboxStyled type='checkbox' />
@@ -127,8 +147,7 @@ const BairroGrid = () => {
                             <TableHeaderItenStyled>Cidade</TableHeaderItenStyled>
                             <th style={{ display: 'flex', alignItems: 'center', border: 'none' }}>
                                 Quantidade
-                                <select
-                                    style={{ margin: '5px', borderRadius: '5px', fontSize: '15px', border: 'none', fontFamily: 'sans-serif', display: open ? 'none' : 'block' }}
+                                <SelectStyled
                                     onChange={(event) => setSelectPage(+event.target.value)}
                                     value={selectPage}
                                 >
@@ -137,13 +156,13 @@ const BairroGrid = () => {
                                             {pages}
                                         </option>
                                     ))}
-                                </select>
+                                </SelectStyled>
                             </th>
-                        </tr>
+                        </TrStyled>
                     </thead>
-                    <tbody>
+                    <TBody>
                         {bairrosFiltrados.slice(0, selectPage).map((bairro) => (
-                            <tr key={bairro.id}>
+                            <TrBodyStyled key={bairro.id}>
                                 <td style={{ display: 'none' }}>
                                     <DivWarpper>
                                         <InputCheckboxStyled type='checkbox' />
@@ -152,17 +171,17 @@ const BairroGrid = () => {
                                 <th style={{ display: 'none' }}>{bairro.id}</th>
                                 <th>{bairro.nome}</th>
                                 <th>{bairro.valorFrete}</th>
-                                <TableDataItenStyled>{bairro.IsentaFrete ? 'Sim' : 'Não'}</TableDataItenStyled>
+                                <TableDataItenStyled>{bairro.isentaFrete ? <IconsCheckStyled /> : <IconNoCheckedStyled />}</TableDataItenStyled>
                                 <TableDataItenStyled>{bairro.cidadeId}</TableDataItenStyled>
                                 <th>
-                                    <IconEditButtonsStyled />
+                                    <IconEditButtonsStyled onClick={() => { setId(bairro.id), setOpenModal(!isOpenModal) }} />
                                     <IconExcudeButtonStyled onClick={() => { setId(bairro.id), setOpen(true) }} />
                                 </th>
-                            </tr>
+                            </TrBodyStyled>
                         ))}
-                    </tbody>
+                    </TBody>
                 </TableStyledWraper>
-            </div>
+            </DivGlobal>
         </div>
     );
 }

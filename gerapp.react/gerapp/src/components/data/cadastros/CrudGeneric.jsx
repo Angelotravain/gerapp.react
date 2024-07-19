@@ -15,6 +15,16 @@ export const getItens = async ({ link }) => {
     }
 };
 
+export const getItensById = async () => {
+    try {
+        console.log(link, id);
+        const response = await api.get(`Cidade/5595`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching request:', error);
+        throw error;
+    }
+};
 
 export const deleteItem = async ({ link, id }) => {
     try {

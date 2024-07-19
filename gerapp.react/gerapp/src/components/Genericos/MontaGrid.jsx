@@ -1,9 +1,9 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
-import Grid from './Grid';
+import Grid from './TBody';
 import Loading from '../loading/Loading';
 import ImagemErro from '../loading/ImagemErro';
-import { getItens } from '../../data/cadastros/CrudGeneric';
+import { getItens } from '../data/cadastros/CrudGeneric';
 
 const MontaGrid = ({ link, columns, filter, redirect }) => {
     const [itens, setItens] = useState([]);

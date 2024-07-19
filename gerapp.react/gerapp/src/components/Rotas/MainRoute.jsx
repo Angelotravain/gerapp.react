@@ -35,6 +35,11 @@ const MainRoute = ({ isOpen }) => {
                     {/* Financeiro */}
                     <Route path='/ContaReceber' element={<ContaReceberGrid />} />
                     <Route path='/FormaPagamento' element={<FormaPagamentoGrid />} />
+
+
+                    {/* Rotas de formulários */}
+
+                    {/* <Route path='/Bairro_form' element={<BairroForm />} /> */}
                 </Routes>
             </Router>
         </div>

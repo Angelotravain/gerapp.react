@@ -1,5 +1,4 @@
 import React from 'react'
-import MontaGrid from '../../englobamento/MontaGrid'
 
 
 const TipoEquipamentoGrid = () => {
@@ -8,7 +7,7 @@ const TipoEquipamentoGrid = () => {
     const column = ['id', 'Descrição', 'Modelo', 'Tempo entre manutenção', '']
     const filter = 'descricao';
     return (
-        <MontaGrid link={link} columns={column} filter={filter} redirect={redirect} />
+        <div></div>
     )
 }
 

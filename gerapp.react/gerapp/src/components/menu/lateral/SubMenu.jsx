@@ -5,7 +5,7 @@ import {
     dataCadastroMenus,
     dataFinanceiroMenus,
     dataLocacaoMenus,
-} from '../../../data/menu/DataMenu';
+} from '../../data/menu/DataMenu';
 import {
     IconCadastroStyled,
     IconFinanceiroStyled,

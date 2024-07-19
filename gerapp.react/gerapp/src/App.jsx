@@ -7,9 +7,10 @@ import styled from 'styled-components'
 const AppWrapper = styled.div`
     display: flex;
     flex-direction: column;
-    width: 100dvw;
-    height: 100dvh;
+    width: 100vw;
+    height: 100vh;
     overflow-x: hidden;
+    background-color: ${props => props.theme.colors.texto};
 `;
 
 const App = () => {
