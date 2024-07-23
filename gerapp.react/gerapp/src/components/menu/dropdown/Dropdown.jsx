@@ -20,7 +20,12 @@ const Dropdown = ({ children, title, icon }) => {
         <DropWrapper onClick={toggleDropdown}>
             <ListDropDrawer>
                 <ButtonDropDownStyled>
-                    <div>{icon}{title}{open ? <IoIosArrowForward /> : <IoIosArrowDown />}</div>
+                    {icon}
+                    {title}
+                    {open ?
+                        <div><IoIosArrowForward /></div>
+                        :
+                        <div><IoIosArrowDown /></div>}
                 </ButtonDropDownStyled>
                 <ListInternalDropDown isOpen={open}>
                     {children}

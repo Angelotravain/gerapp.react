@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
     TableStyledWraper,
     IconEditButtonsStyled,
@@ -7,69 +7,67 @@ import {
     DivWarpper,
     DivWarpperTextAlign,
     DivWarpperTextFixed,
-    IconSearchStyled,
     IconAddItemStyled,
     WarningSpanStyled,
     TableDataItenStyled,
     TableHeaderItenStyled,
     DivGlobal,
     TrStyled,
-    SelectStyled,
-    TrBodyStyled
+    TrBodyStyled,
+    DivPagnation
 } from './Global/GridGeneric.module.js';
 import Loading from '../../loading/Loading.jsx';
-import ImagemErro from '../../loading/ImagemErro';
-import Refresh from '../../utils/Refresh.jsx';
+import ImagemErro from '../../loading/ImagemErro.jsx';
+import Refresh from '../../genericos/utils/Refresh.jsx';
 import {
     getItens,
     deleteItem,
     getItensById
 } from '../../data/cadastros/CrudGeneric.jsx';
-import TBody from '../../Genericos/TBody.jsx'
-import { useNavigate } from 'react-router-dom';
-import ModalForm from '../../Formularios/ModalForm.jsx';
-import FormBairroFields from '../../CamposFormularios/FormBairroFields.jsx'
+import TBody from '../../genericos/TBody.jsx'
 import {
     IconsCheckStyled,
     IconNoCheckedStyled
-} from '../../IconsStyled.module.js'
-import { ButtonStyled } from '../../Genericos/Button.module.js';
+} from '../../genericos/utils/IconsStyled.module.js'
+import { ButtonStyled } from '../../genericos/Button.module.js';
 import {
     IconSavedStyled,
     IconCancelStyled
-} from '../../IconsStyled.module.js'
+} from '../../genericos/utils/IconsStyled.module.js'
+import { GrPrevious } from "react-icons/gr";
+import { GrNext } from "react-icons/gr";
+import { useNavigate } from 'react-router-dom';
+import { debounce } from 'lodash'; // Adicione esta linha
 
 const BairroGrid = () => {
     const [bairros, setBairros] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [isOpenModal, setOpenModal] = useState(false);
     const [error, setError] = useState('');
-    const [selectPage, setSelectPage] = useState(20);
-    const quantidadeItensPage = [5, 10, 15, 20, 50];
     const [inputValue, setInputValue] = useState('');
     const [filter, setFilter] = useState('');
     const [open, setOpen] = useState(false);
-    const [bairrosFiltrados, setBairrosFiltrados] = useState([]);
     const [id, setId] = useState(0);
+    const [currentPage, setCurrentPage] = useState(0);
+    const itemsPerPage = 5;
     const link = 'Bairro';
-    const city = 'Cidade';
-
     const navigate = useNavigate();
 
     const handleInputChange = (e) => {
         const value = e.target.value;
         console.log(value.toString());
         setInputValue(value);
-        setFilter(value);
+        debouncedFilter(value);
     };
 
     const handleKeyPress = (e) => {
         if (e.key === 'Enter') {
             const value = e.target.value;
             setInputValue(value);
-            setFilter(value);
+            debouncedFilter(value);
         }
     };
+
+    const debouncedFilter = useMemo(() => debounce((value) => setFilter(value), 300), []);
 
     const itemDelete = async (id) => {
         try {
@@ -82,40 +80,45 @@ const BairroGrid = () => {
         }
     };
 
-    const bairrosRefatorados = () => {
-        if (!bairros || !filter) return bairros;
-        return bairros.filter((a) => a['nome'].toUpperCase().includes(filter.toUpperCase()));
-    };
-
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const data = await getItens({ link });
-                setBairrosFiltrados(bairrosRefatorados());
+                const data = await getItens(link);
                 setBairros(data);
-
+                setLoading(false);
             } catch (err) {
                 setError(err);
-            } finally {
                 setLoading(false);
             }
         };
         fetchData();
-    }, [filter, bairros]);
+    }, []); // Remova 'bairros' da lista de dependências
+
+    const bairrosFiltrados = useMemo(() => {
+        if (!filter) return bairros;
+        return bairros.filter((a) => a['nome'].toUpperCase().includes(filter.toUpperCase()));
+    }, [bairros, filter]);
+
+    const handlePrevious = () => {
+        setCurrentPage((prev) => Math.max(prev - 1, 0));
+    };
+
+    const handleNext = () => {
+        setCurrentPage((prev) => (prev + 1) * itemsPerPage < bairrosFiltrados.length ? prev + 1 : prev);
+    };
+
+    const paginatedBairros = useMemo(() => bairrosFiltrados.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage), [bairrosFiltrados, currentPage]);
 
     if (loading) return <Loading />;
     if (error) return <ImagemErro />;
 
     return (
         <div>
-            <ModalForm isOpen={isOpenModal} setOpenModal={setOpenModal}>
-                <FormBairroFields idEdit={id} />
-            </ModalForm>
             <WarningSpanStyled style={{ display: open ? 'flex' : 'none' }}>
                 <p>Deseja realmente excluir o item?</p>
                 <div>
                     <ButtonStyled onClick={() => itemDelete(id)}><IconSavedStyled /></ButtonStyled>
-                    <ButtonStyled onClick={() => setOpen(false)}><IconCancelStyled /></ButtonStyled>
+                    <ButtonStyled onClick={() => setOpen(false)} corFundo='#FA170F'><IconCancelStyled /></ButtonStyled>
                 </div>
             </WarningSpanStyled>
             <DivWarpperTextAlign>
@@ -127,8 +130,7 @@ const BairroGrid = () => {
                         onChange={handleInputChange}
                         onKeyPress={handleKeyPress}
                     />
-                    <IconSearchStyled onClick={() => handleInputChange} />
-                    <IconAddItemStyled onClick={() => { setId(0), setOpenModal(!isOpenModal) }} />
+                    <IconAddItemStyled onClick={() => navigate('/Bairro_form')} />
                 </DivWarpperTextFixed>
             </DivWarpperTextAlign>
             <DivGlobal>
@@ -145,23 +147,11 @@ const BairroGrid = () => {
                             <th>valor frete</th>
                             <TableHeaderItenStyled>Isenta frete</TableHeaderItenStyled>
                             <TableHeaderItenStyled>Cidade</TableHeaderItenStyled>
-                            <th style={{ display: 'flex', alignItems: 'center', border: 'none' }}>
-                                Quantidade
-                                <SelectStyled
-                                    onChange={(event) => setSelectPage(+event.target.value)}
-                                    value={selectPage}
-                                >
-                                    {quantidadeItensPage.map((pages) => (
-                                        <option key={pages} value={pages}>
-                                            {pages}
-                                        </option>
-                                    ))}
-                                </SelectStyled>
-                            </th>
+                            <th>Opções</th>
                         </TrStyled>
                     </thead>
                     <TBody>
-                        {bairrosFiltrados.slice(0, selectPage).map((bairro) => (
+                        {paginatedBairros.map((bairro) => (
                             <TrBodyStyled key={bairro.id}>
                                 <td style={{ display: 'none' }}>
                                     <DivWarpper>
@@ -172,15 +162,19 @@ const BairroGrid = () => {
                                 <th>{bairro.nome}</th>
                                 <th>{bairro.valorFrete}</th>
                                 <TableDataItenStyled>{bairro.isentaFrete ? <IconsCheckStyled /> : <IconNoCheckedStyled />}</TableDataItenStyled>
-                                <TableDataItenStyled>{bairro.cidadeId}</TableDataItenStyled>
+                                <TableDataItenStyled>{bairro.cidade.nome}</TableDataItenStyled>
                                 <th>
-                                    <IconEditButtonsStyled onClick={() => { setId(bairro.id), setOpenModal(!isOpenModal) }} />
-                                    <IconExcudeButtonStyled onClick={() => { setId(bairro.id), setOpen(true) }} />
+                                    <IconEditButtonsStyled onClick={() => navigate('/Bairro_form', { state: bairro })} />
+                                    <IconExcudeButtonStyled onClick={() => { setId(bairro.id); setOpen(true); }} />
                                 </th>
                             </TrBodyStyled>
                         ))}
                     </TBody>
                 </TableStyledWraper>
+                <DivPagnation>
+                    <button onClick={handlePrevious} disabled={currentPage === 0}><GrPrevious /></button>
+                    <button onClick={handleNext} disabled={(currentPage + 1) * itemsPerPage >= bairrosFiltrados.length}><GrNext /></button>
+                </DivPagnation>
             </DivGlobal>
         </div>
     );

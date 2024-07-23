@@ -104,7 +104,8 @@ export const IconSearchStyled = styled(CiSearch)`
     }
 `;
 export const IconAddItemStyled = styled(IoAddOutline)`
-    width: 50px;
+    width: 20%;
+    margin-left: 10px;
     height: 30px;
     border-radius: 5px;
     background-color: ${props => props.theme.colors.success};
@@ -113,7 +114,7 @@ export const IconAddItemStyled = styled(IoAddOutline)`
 
     
     @media(min-width:1000px){
-        width: 80px;
+        width: 20%;
         height: 40px;
     }
 
@@ -185,4 +186,30 @@ export const SelectStyled = styled.select`
         background-color: ${props => props.theme.colors.fundo};
         color: ${props => props.theme.colors.texto};
         display: ${props => props.open ? 'none' : 'block'};
+`;
+
+export const DivPagnation = styled.div`
+    width: 100%;
+    height: 40px;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 20px;
+
+    button{
+        height: 100%;
+        width: 50px;
+        background-color: ${props => props.theme.colors.buttonColor};
+        color: ${props => props.theme.colors.texto};
+        font-weight: bold;
+        font-size: 20px;
+        text-align: center;
+        border: none;
+        cursor: pointer;
+
+        &:hover{
+            opacity: .7;
+        }
+    }
 `;

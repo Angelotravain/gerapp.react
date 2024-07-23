@@ -1,5 +1,5 @@
 import React from 'react'
-import Refresh from '../utils/Refresh';
+import Refresh from '../genericos/utils/Refresh';
 import styled from 'styled-components';
 
 const ButtonStyled = styled.button`

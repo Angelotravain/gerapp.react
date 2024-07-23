@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Sidebar from './components/menu/lateral/Sidebar'
 import Navbar from './components/menu/superior/Navbar';
-import MainRoute from './components/Rotas/MainRoute';
+import MainRoute from './components/rotas/MainRoute';
 import styled from 'styled-components'
 
 const AppWrapper = styled.div`

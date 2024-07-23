@@ -3,6 +3,7 @@ import { FiSave } from "react-icons/fi";
 import { FaCheck } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import { IoExit } from "react-icons/io5";
+import { CiEdit } from "react-icons/ci";
 
 export const IconSavedStyled = styled(FiSave)`
         width: 80%;
@@ -27,3 +28,9 @@ export const IconCancelStyled = styled(IoExit)`
         height: 80%;
         color: ${props => props.theme.colors.texto};
     `;
+
+export const IconEditStyled = styled(CiEdit)`
+            width: 80%;
+        height: 80%;
+        color: ${props => props.theme.colors.texto};
+`;

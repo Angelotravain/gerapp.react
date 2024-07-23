@@ -9,25 +9,27 @@ export const ListDropDrawer = styled.li`
 text-decoration: none;
 list-style: none;`;
 
-export const ButtonDropDownStyled = styled.a`
+export const ButtonDropDownStyled = styled.div`
     display: flex;
     text-decoration: none;
-    flex-direction: column;
+    flex-direction: row;
+    gap: 11%;
     padding: 10px;
-    width: 100%;
+    width: 100%;    
+    align-items: center;
 
     div{
-        color: ${props => props.theme.colors.texto};
         display: flex;
-        flex-direction: row;
-        justify-content: space-around;
+        flex-wrap: wrap;
+        justify-content: flex-end;
     }
-
-            &:hover{
+    &:hover{
             background-color: ${props => props.theme.colors.hover};
         }
 `;
 
 export const ListInternalDropDown = styled.ul`
-        display: ${(prop) => prop.isOpen ? 'none' : 'block'};
+        display: ${(props) => props.isOpen ? 'none' : 'block'};
+        width: 100%;
+    
     `;
