@@ -1,37 +1,33 @@
-import React, { useState } from 'react';
-import { IoIosArrowDown } from "react-icons/io";
-import { IoIosArrowForward } from "react-icons/io";
+import React, { useState } from 'react'
 import {
-    ButtonDropDownStyled,
-    ListDropDrawer,
-    DropWrapper,
-    ListInternalDropDown
-} from './Dropdown.module';
+    DropContainer,
+    DropTitle,
+    DropModal,
+    LinkButtonModal,
+    DropModalLink
+} from './Dropdown.module'
+import {
+    IoIosArrowForward,
+    IoIosArrowDown,
+    IoMdPeople
+} from "react-icons/io";
+import { FaStreetView } from "react-icons/fa";
+import { GiPoliceOfficerHead } from "react-icons/gi";
+import { MdCorporateFare } from "react-icons/md";
+import { GrUserManager } from "react-icons/gr";
 
-const Dropdown = ({ children, title, icon }) => {
-
-    const [open, setOpen] = useState(true);
-
-    const toggleDropdown = () => {
-        setOpen(!open);
-    };
-
+const Dropdown = ({ title, icon, children }) => {
+    const [isOpen, setIsOpen] = useState();
     return (
-        <DropWrapper onClick={toggleDropdown}>
-            <ListDropDrawer>
-                <ButtonDropDownStyled>
-                    {icon}
-                    {title}
-                    {open ?
-                        <div><IoIosArrowForward /></div>
-                        :
-                        <div><IoIosArrowDown /></div>}
-                </ButtonDropDownStyled>
-                <ListInternalDropDown isOpen={open}>
-                    {children}
-                </ListInternalDropDown>
-            </ListDropDrawer>
-        </DropWrapper>
+        <div>
+            <DropContainer onClick={() => setIsOpen(!isOpen)}>
+                <div></div>
+                <DropTitle>{icon} {title} {!isOpen ? <IoIosArrowForward /> : <IoIosArrowDown />}</DropTitle>
+            </DropContainer>
+            <DropModal isOpen={isOpen}>
+                {children}
+            </DropModal>
+        </div>
     )
 }
 

@@ -1,32 +1,18 @@
 import React, { useState } from 'react';
-import Sidebar from './components/menu/lateral/Sidebar'
-import Navbar from './components/menu/superior/Navbar';
-import MainRoute from './components/rotas/MainRoute';
-import styled from 'styled-components'
-
-const AppWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    width: 100vw;
-    height: 100vh;
-    overflow-x: hidden;
-    background-color: ${props => props.theme.colors.texto};
-`;
+import Template from './components/menu/template/Template'
+import { AppContainer } from './App.module';
+import MainRoute from './rotas/rotas/MainRoute';
+import GlobalStyle from './globais/globalStyle.js';
 
 const App = () => {
   const [isOpen, setIsOpen] = useState(false);
-
-  const toggleSidebar = () => {
-    setIsOpen(!isOpen);
-  };
-
   return (
-    <AppWrapper>
-      <Navbar toggleSidebar={toggleSidebar} />
-      <Sidebar isOpen={isOpen} toggleSidebar={toggleSidebar} />
+    <AppContainer>
+      <Template isOpen={isOpen} toogleOpen={setIsOpen}>
+      </Template>
       <MainRoute isOpen={isOpen} />
-
-    </AppWrapper>
+      <GlobalStyle />
+    </AppContainer>
   );
 };
 

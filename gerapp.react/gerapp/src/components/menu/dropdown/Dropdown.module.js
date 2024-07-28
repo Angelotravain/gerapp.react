@@ -1,35 +1,50 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
-export const DropWrapper = styled.ul`
-    cursor: pointer;
-    padding: 0;
-`;
-
-export const ListDropDrawer = styled.li`
-text-decoration: none;
-list-style: none;`;
-
-export const ButtonDropDownStyled = styled.div`
+export const DropContainer = styled.div`
     display: flex;
-    text-decoration: none;
-    flex-direction: row;
-    gap: 11%;
-    padding: 10px;
-    width: 100%;    
+    gap: 10px;
     align-items: center;
+    flex-direction: row;
 
-    div{
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: flex-end;
-    }
     &:hover{
-            background-color: ${props => props.theme.colors.hover};
-        }
+        background-color: ${props => props.theme.colors.hover};
+    }
 `;
 
-export const ListInternalDropDown = styled.ul`
-        display: ${(props) => props.isOpen ? 'none' : 'block'};
-        width: 100%;
-    
-    `;
+export const DropTitle = styled.h3`
+    color: ${props => props.theme.colors.textColor};
+    font-size: 1.2rem;
+    padding: 10px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+`;
+
+export const DropModal = styled.div`
+    width: 100%;
+    display: ${props => props.isOpen ? 'flex' : 'none'};
+    flex-direction: column;
+`;
+export const LinkButtonModal = styled.a`
+    font-size: 1.1rem;
+    font-weight: bold;
+    gap: 10px;
+    color: ${props => props.theme.colors.textColor};
+    text-decoration: none;
+    margin-left: 20%;
+
+`;
+
+export const DropModalLink = styled.div`
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    cursor: pointer;
+    width: 100%;
+    border: none;
+    &:hover{
+        background-color: ${props => props.theme.colors.hover};
+    }
+`;
