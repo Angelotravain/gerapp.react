@@ -38,7 +38,7 @@ const BairroGrid = () => {
     const [id, setId] = useState(0);
     const [currentPage, setCurrentPage] = useState(0);
     const itemsPerPage = 8;
-    const link = 'Bairro';
+    const link = 'Cliente';
     const [showDelete, setShowDelete] = useState(false);
     const navigate = useNavigate();
 
@@ -62,7 +62,7 @@ const BairroGrid = () => {
     };
 
     const redirectForm = (item) => {
-        navigate('/Bairro_form', { state: item });
+        navigate('/Cliente_form', { state: item });
     };
 
     const debouncedFilter = useMemo(() => debounce((value) => setFilter(value), 300), []);
