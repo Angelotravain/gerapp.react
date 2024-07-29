@@ -28,18 +28,18 @@ import Loading from '../../../components/Genericos/Loading/Loading.jsx';
 import ImagemErro from '../../../components/Genericos/Loading/ImagemErro.jsx';
 import { formatDate } from '../../../components/Genericos/utils/Formater.js';
 
-const ClienteGrid = () => {
+const FormaPagamentoGrid = () => {
     const [isGear, setGear] = useState(false);
     const [isFilter, setIsFilter] = useState(false);
     const [filter, setFilter] = useState('');
-    const [clientes, setClientes] = useState([]);
+    const [formasPagamento, setFormasPagamento] = useState([]);
     const [error, setError] = useState('');
     const [inputValue, setInputValue] = useState('');
     const [loading, setLoading] = useState(true);
     const [id, setId] = useState(0);
     const [currentPage, setCurrentPage] = useState(0);
     const itemsPerPage = 8;
-    const link = 'Cliente';
+    const link = 'FormaPagamento';
     const [showDelete, setShowDelete] = useState(false);
     const navigate = useNavigate();
 
@@ -63,7 +63,7 @@ const ClienteGrid = () => {
     };
 
     const redirectForm = (item) => {
-        navigate('/Cliente_form', { state: item });
+        navigate('/FormaPagamento_form', { state: item });
     };
 
     const debouncedFilter = useMemo(() => debounce((value) => setFilter(value), 300), []);
@@ -72,7 +72,7 @@ const ClienteGrid = () => {
         const fetchData = async () => {
             try {
                 const data = await getItens(link);
-                setClientes(data);
+                setFormasPagamento(data);
                 setLoading(false);
             } catch (err) {
                 setError(err);
@@ -82,23 +82,23 @@ const ClienteGrid = () => {
         fetchData();
     }, []);
 
-    const clientesFiltrados = useMemo(() => {
-        if (!filter) return clientes;
-        return clientes.filter((a) => a['nome'].toUpperCase().includes(filter.toUpperCase()));
-    }, [clientes, filter]);
+    const FormasPagamentoFiltrados = useMemo(() => {
+        if (!filter) return formasPagamento;
+        return formasPagamento.filter((a) => a['descricao'].toUpperCase().includes(filter.toUpperCase()));
+    }, [formasPagamento, filter]);
 
     const handlePrevious = () => {
         setCurrentPage((prev) => Math.max(prev - 1, 0));
     };
 
     const handleNext = () => {
-        setCurrentPage((prev) => (prev + 1) * itemsPerPage < clientesFiltrados.length ? prev + 1 : prev);
+        setCurrentPage((prev) => (prev + 1) * itemsPerPage < FormasPagamentoFiltrados.length ? prev + 1 : prev);
     };
 
-    const paginatedClientes = useMemo(() => clientesFiltrados.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage), [clientesFiltrados, currentPage]);
+    const paginatedFormasPagamento = useMemo(() => FormasPagamentoFiltrados.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage), [FormasPagamentoFiltrados, currentPage]);
 
     const handleExportExcel = () => {
-        const jsonData = clientesFiltrados;
+        const jsonData = FormasPagamentoFiltrados;
         ExportExcel(jsonData);
         setGear(!isGear);
     };
@@ -114,7 +114,7 @@ const ClienteGrid = () => {
                     <Label>Filtrar</Label>
                     <Input
                         type="text"
-                        placeholder='Buscar cliente...'
+                        placeholder='Buscar formas de pagamento...'
                         value={inputValue}
                         onChange={handleInputChange}
                         onKeyPress={handleKeyPress} />
@@ -131,18 +131,17 @@ const ClienteGrid = () => {
                     setFilter={setIsFilter}
                     navigate={() => redirectForm()}
                     setGear={setGear}
-                    listName={['Nome', 'E-mail', 'telefone', 'Data nascimento', 'Status']}
+                    listName={['Descrição', 'Crédito ?', 'Débito ?', 'Ah Vista ?']}
                     next={handleNext}
                     previous={handlePrevious}>
-                    {paginatedClientes.map((cliente) => (
-                        <Tr key={cliente.id}>
-                            <Td onClick={() => redirectForm(cliente)}>{cliente.nome}</Td>
-                            <Td onClick={() => redirectForm(cliente)}>{cliente.email}</Td>
-                            <Td onClick={() => redirectForm(cliente)}>{cliente.telefone}</Td>
-                            <Td onClick={() => redirectForm(cliente)}>{formatDate(cliente.dataNascimento)}</Td>
-                            <Td onClick={() => redirectForm(cliente)}>{cliente.statusCliente ? 'Ativo' : 'Inativo'}</Td>
+                    {paginatedFormasPagamento.map((formaPagamento) => (
+                        <Tr key={formaPagamento.id}>
+                            <Td onClick={() => redirectForm(formaPagamento)}>{formaPagamento.descricao}</Td>
+                            <Td onClick={() => redirectForm(formaPagamento)}>{formaPagamento.ehCredito ? 'Sim' : 'Não'}</Td>
+                            <Td onClick={() => redirectForm(formaPagamento)}>{formaPagamento.ehDebito ? 'Sim' : 'Não'}</Td>
+                            <Td onClick={() => redirectForm(formaPagamento)}>{formaPagamento.ehAvista ? 'Sim' : 'Não'}</Td>
                             <Td>
-                                <ButtonDelete onClick={() => { setId(cliente.id); handleDeleteClick(); setGear(false); setIsFilter(false) }} />
+                                <ButtonDelete onClick={() => { setId(formaPagamento.id); handleDeleteClick(); setGear(false); setIsFilter(false) }} />
                             </Td>
                         </Tr>
                     ))}
@@ -152,4 +151,4 @@ const ClienteGrid = () => {
     )
 }
 
-export default ClienteGrid
+export default FormaPagamentoGrid

@@ -30,7 +30,12 @@ export const Td = styled.td`
     padding: .5rem;
     text-align: left;
     border-bottom: ${props => props.theme.colors.border};
+`;
 
+export const ImgAvatarTable = styled.img`
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
 `;
 
 export const Tr = styled.tr`
@@ -42,30 +47,39 @@ export const Tr = styled.tr`
 
 export const Filter = styled(MdFilterList)`
     font-size: 2rem;
+    width: 40px;
+    height: 40px;
     padding: 3%;
     cursor: pointer;
 
     @media screen and (max-width: 650px) {
-        font-size: 3rem;
+        width: 30px;
+        height: 30px;
     }
 
     &:hover{
         background-color: ${props => props.theme.colors.hover};
         border-radius: 50%;
+        border: 1px solid ${props => props.theme.colors.blue};
     }
 `;
 
 export const Gear = styled(GoGear)`
     font-size: 2rem;
+    width: 40px;
+    height: 40px;
     padding: 3%;
     cursor: pointer;
 
     @media screen and (max-width: 650px) {
-        font-size: 3rem;
+        width: 30px;
+        height: 30px;
     }
+
     &:hover{
         background-color: ${props => props.theme.colors.hover};
         border-radius: 50%;
+        border: 1px solid ${props => props.theme.colors.blue};
     }
 `;
 

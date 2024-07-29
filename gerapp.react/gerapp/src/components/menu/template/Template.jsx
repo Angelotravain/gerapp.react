@@ -9,9 +9,9 @@ import {
 } from './Template.module'
 import Dropdown from '../dropdown/Dropdown';
 import { MdAppRegistration } from "react-icons/md";
-import LinkCadastrosRedirect from '../link/LinkCadastrosRedirect';
-import LinkFinanceiroRedirect from '../link/LinkFinanceiroRedirect';
-import LinkLocacoesRedirect from '../link/LinkLocacoesRedirect';
+import LinkCadastrosRedirect from './link/LinkCadastrosRedirect';
+import LinkFinanceiroRedirect from './link/LinkFinanceiroRedirect';
+import LinkLocacoesRedirect from './link/LinkLocacoesRedirect';
 import { GiCash } from "react-icons/gi";
 import { GrDeliver } from "react-icons/gr";
 

@@ -6,7 +6,8 @@ import {
     TableFilter,
     TableGear,
     ButtonGearMenu,
-    DivTableContent
+    DivTableContent,
+    ImgAvatarTable
 } from '../../../components/Tabela/Tabela.module'
 import TableOrigin from '../../../components/Tabela/TableOrigin'
 import {
@@ -22,24 +23,27 @@ import {
 } from '../../../components/button/Button.module'
 import { useNavigate } from 'react-router-dom';
 import { debounce } from 'lodash';
-import { getItens } from '../../../services/httpRequest';
+import {
+    getItens,
+    getItensById
+} from '../../../services/httpRequest';
 import DeleteItens from '../../../components/Delete/DeleteItens';
 import Loading from '../../../components/Genericos/Loading/Loading.jsx';
 import ImagemErro from '../../../components/Genericos/Loading/ImagemErro.jsx';
 import { formatDate } from '../../../components/Genericos/utils/Formater.js';
 
-const ClienteGrid = () => {
+const VeiculoGrid = () => {
     const [isGear, setGear] = useState(false);
     const [isFilter, setIsFilter] = useState(false);
     const [filter, setFilter] = useState('');
-    const [clientes, setClientes] = useState([]);
+    const [veiculos, setVeiculos] = useState([]);
     const [error, setError] = useState('');
     const [inputValue, setInputValue] = useState('');
     const [loading, setLoading] = useState(true);
     const [id, setId] = useState(0);
     const [currentPage, setCurrentPage] = useState(0);
     const itemsPerPage = 8;
-    const link = 'Cliente';
+    const link = 'Veiculo';
     const [showDelete, setShowDelete] = useState(false);
     const navigate = useNavigate();
 
@@ -63,7 +67,7 @@ const ClienteGrid = () => {
     };
 
     const redirectForm = (item) => {
-        navigate('/Cliente_form', { state: item });
+        navigate('/Veiculo_form', { state: item });
     };
 
     const debouncedFilter = useMemo(() => debounce((value) => setFilter(value), 300), []);
@@ -72,7 +76,7 @@ const ClienteGrid = () => {
         const fetchData = async () => {
             try {
                 const data = await getItens(link);
-                setClientes(data);
+                setVeiculos(data);
                 setLoading(false);
             } catch (err) {
                 setError(err);
@@ -82,23 +86,23 @@ const ClienteGrid = () => {
         fetchData();
     }, []);
 
-    const clientesFiltrados = useMemo(() => {
-        if (!filter) return clientes;
-        return clientes.filter((a) => a['nome'].toUpperCase().includes(filter.toUpperCase()));
-    }, [clientes, filter]);
+    const veiculosFiltrados = useMemo(() => {
+        if (!filter) return veiculos;
+        return veiculos.filter((a) => a['descricao'].toUpperCase().includes(filter.toUpperCase()));
+    }, [veiculos, filter]);
 
     const handlePrevious = () => {
         setCurrentPage((prev) => Math.max(prev - 1, 0));
     };
 
     const handleNext = () => {
-        setCurrentPage((prev) => (prev + 1) * itemsPerPage < clientesFiltrados.length ? prev + 1 : prev);
+        setCurrentPage((prev) => (prev + 1) * itemsPerPage < veiculosFiltrados.length ? prev + 1 : prev);
     };
 
-    const paginatedClientes = useMemo(() => clientesFiltrados.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage), [clientesFiltrados, currentPage]);
+    const paginatedVeiculos = useMemo(() => veiculosFiltrados.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage), [veiculosFiltrados, currentPage]);
 
     const handleExportExcel = () => {
-        const jsonData = clientesFiltrados;
+        const jsonData = veiculosFiltrados;
         ExportExcel(jsonData);
         setGear(!isGear);
     };
@@ -114,7 +118,7 @@ const ClienteGrid = () => {
                     <Label>Filtrar</Label>
                     <Input
                         type="text"
-                        placeholder='Buscar cliente...'
+                        placeholder='Buscar veículo...'
                         value={inputValue}
                         onChange={handleInputChange}
                         onKeyPress={handleKeyPress} />
@@ -131,18 +135,18 @@ const ClienteGrid = () => {
                     setFilter={setIsFilter}
                     navigate={() => redirectForm()}
                     setGear={setGear}
-                    listName={['Nome', 'E-mail', 'telefone', 'Data nascimento', 'Status']}
+                    listName={['Marca', 'Modelo', 'Ano', 'Placa', 'Manutenção em dia ?']}
                     next={handleNext}
                     previous={handlePrevious}>
-                    {paginatedClientes.map((cliente) => (
-                        <Tr key={cliente.id}>
-                            <Td onClick={() => redirectForm(cliente)}>{cliente.nome}</Td>
-                            <Td onClick={() => redirectForm(cliente)}>{cliente.email}</Td>
-                            <Td onClick={() => redirectForm(cliente)}>{cliente.telefone}</Td>
-                            <Td onClick={() => redirectForm(cliente)}>{formatDate(cliente.dataNascimento)}</Td>
-                            <Td onClick={() => redirectForm(cliente)}>{cliente.statusCliente ? 'Ativo' : 'Inativo'}</Td>
+                    {paginatedVeiculos.map((veiculo) => (
+                        <Tr key={veiculo.id}>
+                            <Td onClick={() => redirectForm(veiculo)}>{veiculo.marca}</Td>
+                            <Td onClick={() => redirectForm(veiculo)}>{veiculo.modelo}</Td>
+                            <Td onClick={() => redirectForm(veiculo)}>{veiculo.ano}</Td>
+                            <Td onClick={() => redirectForm(veiculo)}>{veiculo.placa}</Td>
+                            <Td onClick={() => redirectForm(veiculo)}>{veiculo.manutencaoEmDia ? 'Sim' : 'Não'}</Td>
                             <Td>
-                                <ButtonDelete onClick={() => { setId(cliente.id); handleDeleteClick(); setGear(false); setIsFilter(false) }} />
+                                <ButtonDelete onClick={() => { setId(veiculo.id); handleDeleteClick(); setGear(false); setIsFilter(false) }} />
                             </Td>
                         </Tr>
                     ))}
@@ -152,4 +156,4 @@ const ClienteGrid = () => {
     )
 }
 
-export default ClienteGrid
+export default VeiculoGrid

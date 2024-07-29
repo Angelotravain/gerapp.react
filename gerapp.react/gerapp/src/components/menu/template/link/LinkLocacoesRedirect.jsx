@@ -2,7 +2,7 @@ import React from 'react'
 import {
     LinkButtonModal,
     DropModalLink
-} from '../dropdown/Dropdown.module'
+} from '../../dropdown/Dropdown.module'
 import { GrDeliver } from "react-icons/gr";
 import { FaTable } from "react-icons/fa6";
 import { MdOutlineTableRestaurant } from "react-icons/md";
@@ -18,7 +18,7 @@ const LinkLocacoesRedirect = () => {
                 <LinkButtonModal href='/Locacao'><FaTable /> Locações</LinkButtonModal>
             </DropModalLink>
             <DropModalLink>
-                <LinkButtonModal href='/tipoEquipamento'><MdOutlineTableRestaurant /> Tipo de equipamentos</LinkButtonModal>
+                <LinkButtonModal href='/TipoEquipamento'><MdOutlineTableRestaurant /> Tipo de equipamentos</LinkButtonModal>
             </DropModalLink>
             <DropModalLink>
                 <LinkButtonModal href='/Veiculo'><GrDeliver /> Veículos</LinkButtonModal>

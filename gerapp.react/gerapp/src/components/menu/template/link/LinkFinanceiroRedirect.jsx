@@ -4,7 +4,7 @@ import { MdPix } from "react-icons/md";
 import {
     LinkButtonModal,
     DropModalLink
-} from '../dropdown/Dropdown.module'
+} from '../../dropdown/Dropdown.module'
 
 const LinkFinanceiroRedirect = () => {
     return (
@@ -13,7 +13,7 @@ const LinkFinanceiroRedirect = () => {
                 <LinkButtonModal href='/ContasAReceber'><BsPiggyBank /> Contas a receber</LinkButtonModal>
             </DropModalLink>
             <DropModalLink>
-                <LinkButtonModal href='/Cargo'><MdPix /> Formas de pagamento</LinkButtonModal>
+                <LinkButtonModal href='/FormaPagamento'><MdPix /> Formas de pagamento</LinkButtonModal>
             </DropModalLink>
         </div>
     )

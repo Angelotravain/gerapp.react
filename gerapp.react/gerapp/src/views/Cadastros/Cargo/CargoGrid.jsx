@@ -26,20 +26,19 @@ import { getItens } from '../../../services/httpRequest';
 import DeleteItens from '../../../components/Delete/DeleteItens';
 import Loading from '../../../components/Genericos/Loading/Loading.jsx';
 import ImagemErro from '../../../components/Genericos/Loading/ImagemErro.jsx';
-import { formatDate } from '../../../components/Genericos/utils/Formater.js';
 
-const ClienteGrid = () => {
+const CargoGrid = () => {
     const [isGear, setGear] = useState(false);
     const [isFilter, setIsFilter] = useState(false);
     const [filter, setFilter] = useState('');
-    const [clientes, setClientes] = useState([]);
+    const [cargos, setCargos] = useState([]);
     const [error, setError] = useState('');
     const [inputValue, setInputValue] = useState('');
     const [loading, setLoading] = useState(true);
     const [id, setId] = useState(0);
     const [currentPage, setCurrentPage] = useState(0);
     const itemsPerPage = 8;
-    const link = 'Cliente';
+    const link = 'Cargo';
     const [showDelete, setShowDelete] = useState(false);
     const navigate = useNavigate();
 
@@ -63,7 +62,7 @@ const ClienteGrid = () => {
     };
 
     const redirectForm = (item) => {
-        navigate('/Cliente_form', { state: item });
+        navigate('/Cargo_form', { state: item });
     };
 
     const debouncedFilter = useMemo(() => debounce((value) => setFilter(value), 300), []);
@@ -72,7 +71,7 @@ const ClienteGrid = () => {
         const fetchData = async () => {
             try {
                 const data = await getItens(link);
-                setClientes(data);
+                setCargos(data);
                 setLoading(false);
             } catch (err) {
                 setError(err);
@@ -82,23 +81,23 @@ const ClienteGrid = () => {
         fetchData();
     }, []);
 
-    const clientesFiltrados = useMemo(() => {
-        if (!filter) return clientes;
-        return clientes.filter((a) => a['nome'].toUpperCase().includes(filter.toUpperCase()));
-    }, [clientes, filter]);
+    const cargosFiltrados = useMemo(() => {
+        if (!filter) return cargos;
+        return cargos.filter((a) => a['descricao'].toUpperCase().includes(filter.toUpperCase()));
+    }, [cargos, filter]);
 
     const handlePrevious = () => {
         setCurrentPage((prev) => Math.max(prev - 1, 0));
     };
 
     const handleNext = () => {
-        setCurrentPage((prev) => (prev + 1) * itemsPerPage < clientesFiltrados.length ? prev + 1 : prev);
+        setCurrentPage((prev) => (prev + 1) * itemsPerPage < cargosFiltrados.length ? prev + 1 : prev);
     };
 
-    const paginatedClientes = useMemo(() => clientesFiltrados.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage), [clientesFiltrados, currentPage]);
+    const paginatedCargos = useMemo(() => cargosFiltrados.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage), [cargosFiltrados, currentPage]);
 
     const handleExportExcel = () => {
-        const jsonData = clientesFiltrados;
+        const jsonData = cargosFiltrados;
         ExportExcel(jsonData);
         setGear(!isGear);
     };
@@ -114,7 +113,7 @@ const ClienteGrid = () => {
                     <Label>Filtrar</Label>
                     <Input
                         type="text"
-                        placeholder='Buscar cliente...'
+                        placeholder='Buscar cargo...'
                         value={inputValue}
                         onChange={handleInputChange}
                         onKeyPress={handleKeyPress} />
@@ -131,18 +130,17 @@ const ClienteGrid = () => {
                     setFilter={setIsFilter}
                     navigate={() => redirectForm()}
                     setGear={setGear}
-                    listName={['Nome', 'E-mail', 'telefone', 'Data nascimento', 'Status']}
+                    listName={['Descrição', 'Acessa cadastro?', 'Acessa financeiro?', 'Acessa locação?']}
                     next={handleNext}
                     previous={handlePrevious}>
-                    {paginatedClientes.map((cliente) => (
-                        <Tr key={cliente.id}>
-                            <Td onClick={() => redirectForm(cliente)}>{cliente.nome}</Td>
-                            <Td onClick={() => redirectForm(cliente)}>{cliente.email}</Td>
-                            <Td onClick={() => redirectForm(cliente)}>{cliente.telefone}</Td>
-                            <Td onClick={() => redirectForm(cliente)}>{formatDate(cliente.dataNascimento)}</Td>
-                            <Td onClick={() => redirectForm(cliente)}>{cliente.statusCliente ? 'Ativo' : 'Inativo'}</Td>
+                    {paginatedCargos.map((cargo) => (
+                        <Tr key={cargo.id}>
+                            <Td onClick={() => redirectForm(cargo)}>{cargo.descricao}</Td>
+                            <Td onClick={() => redirectForm(cargo)}>{cargo.acessaCadastro ? 'Sim' : 'Não'}</Td>
+                            <Td onClick={() => redirectForm(cargo)}>{cargo.acessaFinanceiro ? 'Sim' : 'Não'}</Td>
+                            <Td onClick={() => redirectForm(cargo)}>{cargo.acessaLocacao ? 'Sim' : 'Não'}</Td>
                             <Td>
-                                <ButtonDelete onClick={() => { setId(cliente.id); handleDeleteClick(); setGear(false); setIsFilter(false) }} />
+                                <ButtonDelete onClick={() => { setId(cargo.id); handleDeleteClick(); setGear(false); setIsFilter(false) }} />
                             </Td>
                         </Tr>
                     ))}
@@ -152,4 +150,4 @@ const ClienteGrid = () => {
     )
 }
 
-export default ClienteGrid
+export default CargoGrid

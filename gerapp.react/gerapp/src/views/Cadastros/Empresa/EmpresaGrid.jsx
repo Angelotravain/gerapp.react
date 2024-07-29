@@ -26,20 +26,19 @@ import { getItens } from '../../../services/httpRequest';
 import DeleteItens from '../../../components/Delete/DeleteItens';
 import Loading from '../../../components/Genericos/Loading/Loading.jsx';
 import ImagemErro from '../../../components/Genericos/Loading/ImagemErro.jsx';
-import { formatDate } from '../../../components/Genericos/utils/Formater.js';
 
-const ClienteGrid = () => {
+const EmpresaGrid = () => {
     const [isGear, setGear] = useState(false);
     const [isFilter, setIsFilter] = useState(false);
     const [filter, setFilter] = useState('');
-    const [clientes, setClientes] = useState([]);
+    const [empresas, setEmpresas] = useState([]);
     const [error, setError] = useState('');
     const [inputValue, setInputValue] = useState('');
     const [loading, setLoading] = useState(true);
     const [id, setId] = useState(0);
     const [currentPage, setCurrentPage] = useState(0);
     const itemsPerPage = 8;
-    const link = 'Cliente';
+    const link = 'Empresa';
     const [showDelete, setShowDelete] = useState(false);
     const navigate = useNavigate();
 
@@ -63,7 +62,7 @@ const ClienteGrid = () => {
     };
 
     const redirectForm = (item) => {
-        navigate('/Cliente_form', { state: item });
+        navigate('/Empresa_form', { state: item });
     };
 
     const debouncedFilter = useMemo(() => debounce((value) => setFilter(value), 300), []);
@@ -72,7 +71,7 @@ const ClienteGrid = () => {
         const fetchData = async () => {
             try {
                 const data = await getItens(link);
-                setClientes(data);
+                setEmpresas(data);
                 setLoading(false);
             } catch (err) {
                 setError(err);
@@ -82,23 +81,23 @@ const ClienteGrid = () => {
         fetchData();
     }, []);
 
-    const clientesFiltrados = useMemo(() => {
-        if (!filter) return clientes;
-        return clientes.filter((a) => a['nome'].toUpperCase().includes(filter.toUpperCase()));
-    }, [clientes, filter]);
+    const empresasFiltrados = useMemo(() => {
+        if (!filter) return empresas;
+        return empresas.filter((a) => a['nome'].toUpperCase().includes(filter.toUpperCase()));
+    }, [empresas, filter]);
 
     const handlePrevious = () => {
         setCurrentPage((prev) => Math.max(prev - 1, 0));
     };
 
     const handleNext = () => {
-        setCurrentPage((prev) => (prev + 1) * itemsPerPage < clientesFiltrados.length ? prev + 1 : prev);
+        setCurrentPage((prev) => (prev + 1) * itemsPerPage < empresasFiltrados.length ? prev + 1 : prev);
     };
 
-    const paginatedClientes = useMemo(() => clientesFiltrados.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage), [clientesFiltrados, currentPage]);
+    const paginatedEmpresas = useMemo(() => empresasFiltrados.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage), [empresasFiltrados, currentPage]);
 
     const handleExportExcel = () => {
-        const jsonData = clientesFiltrados;
+        const jsonData = empresasFiltrados;
         ExportExcel(jsonData);
         setGear(!isGear);
     };
@@ -114,7 +113,7 @@ const ClienteGrid = () => {
                     <Label>Filtrar</Label>
                     <Input
                         type="text"
-                        placeholder='Buscar cliente...'
+                        placeholder='Buscar empresa...'
                         value={inputValue}
                         onChange={handleInputChange}
                         onKeyPress={handleKeyPress} />
@@ -131,18 +130,19 @@ const ClienteGrid = () => {
                     setFilter={setIsFilter}
                     navigate={() => redirectForm()}
                     setGear={setGear}
-                    listName={['Nome', 'E-mail', 'telefone', 'Data nascimento', 'Status']}
+                    listName={['Nome', 'CNPJ', 'Telefone', 'E-mail', 'Site', 'Filial ?']}
                     next={handleNext}
                     previous={handlePrevious}>
-                    {paginatedClientes.map((cliente) => (
-                        <Tr key={cliente.id}>
-                            <Td onClick={() => redirectForm(cliente)}>{cliente.nome}</Td>
-                            <Td onClick={() => redirectForm(cliente)}>{cliente.email}</Td>
-                            <Td onClick={() => redirectForm(cliente)}>{cliente.telefone}</Td>
-                            <Td onClick={() => redirectForm(cliente)}>{formatDate(cliente.dataNascimento)}</Td>
-                            <Td onClick={() => redirectForm(cliente)}>{cliente.statusCliente ? 'Ativo' : 'Inativo'}</Td>
+                    {paginatedEmpresas.map((empresa) => (
+                        <Tr key={empresa.id}>
+                            <Td onClick={() => redirectForm(empresa)}>{empresa.nome}</Td>
+                            <Td onClick={() => redirectForm(empresa)}>{empresa.cnpj}</Td>
+                            <Td onClick={() => redirectForm(empresa)}>{empresa.telefone}</Td>
+                            <Td onClick={() => redirectForm(empresa)}>{empresa.email}</Td>
+                            <Td onClick={() => redirectForm(empresa)}>{empresa.website}</Td>
+                            <Td onClick={() => redirectForm(empresa)}>{empresa.ehFilial ? 'Sim' : 'Não'}</Td>
                             <Td>
-                                <ButtonDelete onClick={() => { setId(cliente.id); handleDeleteClick(); setGear(false); setIsFilter(false) }} />
+                                <ButtonDelete onClick={() => { setId(empresa.id); handleDeleteClick(); setGear(false); setIsFilter(false) }} />
                             </Td>
                         </Tr>
                     ))}
@@ -152,4 +152,4 @@ const ClienteGrid = () => {
     )
 }
 
-export default ClienteGrid
+export default EmpresaGrid

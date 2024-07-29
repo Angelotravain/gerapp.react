@@ -7,7 +7,7 @@ import { GrUserManager } from "react-icons/gr";
 import {
     LinkButtonModal,
     DropModalLink
-} from '../dropdown/Dropdown.module'
+} from '../../dropdown/Dropdown.module'
 
 const LinkCadastrosRedirect = () => {
     return (
