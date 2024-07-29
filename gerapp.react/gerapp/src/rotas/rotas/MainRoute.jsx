@@ -13,6 +13,7 @@ import TipoEquipamentoGrid from '../../views/Cadastros/TipoEquipamento/TipoEquip
 import VeiculoGrid from '../../views/Cadastros/Veiculo/VeiculoGrid';
 import LocacoesGrid from '../../views/Cadastros/Locacoes/LocacoesGrid';
 import ContaAReceberGrid from '../../views/Cadastros/ContaReceber/ContaAReceberGrid';
+import Dashboard from '../../views/tabelas/Home/Dashboard'
 
 const MainContainer = styled.div`
     z-index: 0;
@@ -29,6 +30,7 @@ const MainRoute = ({ isOpen }) => {
             <Router>
                 <Routes>
                     {/* Home */}
+                    <Route path='/' element={<Dashboard />} />
                     <Route path='/Bairro' element={<BairroGrid />} />
                     <Route path='/Cliente' element={<ClienteGrid />} />
                     <Route path='/Funcionario' element={<FuncionarioGrid />} />
