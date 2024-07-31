@@ -34,7 +34,7 @@ export const ButtonContainer = styled.div`
 `;
 
 export const ButtonDelete = styled(MdDeleteOutline)`
-    font-size: 2.5rem;
+    font-size: 40px;
     padding: 3%;
     color: ${props => props.theme.colors.redColor};
     cursor: pointer;
@@ -43,6 +43,10 @@ export const ButtonDelete = styled(MdDeleteOutline)`
         background-color: ${props => props.theme.colors.redColor};
         color: ${props => props.theme.colors.primary};
         border-radius: 5%;
+    }
+
+    @media (min-width:1200px) {
+        font-size: 50px;
     }
 `;
 

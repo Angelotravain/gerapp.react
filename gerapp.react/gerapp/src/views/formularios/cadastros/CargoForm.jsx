@@ -2,9 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { TableContainer } from '../../../components/Tabela/Tabela.module'
 import {
     FormContainer,
-    FormActionContainer,
-    UnodernedList,
-    Li
+    FormActionContainer
 } from '../../../components/form/Form.module';
 import { ButtonForm } from '../../../components/button/Button.module'
 import {
@@ -13,7 +11,7 @@ import {
     Input,
     Label
 } from '../../../components/Input/Input.module'
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import {
     useLocation,
     useNavigate
@@ -23,13 +21,12 @@ import {
     updateItem,
     insertItem
 } from '../../../services/httpRequest';
-import ValorInput from '../../../components/Genericos/utils/ValorInput';
 import {
     SuccessIcon,
     ReturnMessage
 } from '../FormStyled.module'
 
-const BairroForm = () => {
+const CargoForm = () => {
     const [cidades, setCidades] = useState([]);
     const [filteredCidades, setFilteredCidades] = useState([]);
     const [filter, setFilter] = useState('');
@@ -39,6 +36,7 @@ const BairroForm = () => {
     const data = location.state;
     const [messageReturn, setMessageReturn] = useState('');
     const navigate = useNavigate();
+    const link = 'Cargo';
 
     const {
         register,
@@ -52,13 +50,10 @@ const BairroForm = () => {
 
     const onSubmit = async (formData) => {
         try {
-            const link = 'Bairro';
+            const data = JSON.stringify(formData);
             const { cidade, ...filteredData } = formData;
 
             filteredData.id = +filteredData.id || 0;
-            filteredData.valorFrete = +filteredData.valorFrete;
-
-            const data = JSON.stringify(filteredData);
 
             if (filteredData.id !== 0) {
                 console.log('update', data);
@@ -87,17 +82,16 @@ const BairroForm = () => {
     };
 
     const redirectGrid = () => {
-        navigate('/Bairro');
+        navigate('/Cargo');
     };
 
     useEffect(() => {
         if (data !== null) {
             setValue('id', data.id);
-            setValue('nome', data.nome);
-            setValue('isentaFrete', data.isentaFrete);
-            setValue('valorFrete', data.valorFrete);
-            setValue('cidade', data.cidade.nome);
-            setValue('cidadeId', data.cidade.id);
+            setValue('descricao', data.descricao);
+            setValue('acessaCadastro', data.acessaCadastro);
+            setValue('acessaFinanceiro', data.acessaFinanceiro);
+            setValue('acessaLocacao', data.acessaLocacao);
         }
     }, []);
 
@@ -126,27 +120,6 @@ const BairroForm = () => {
         fetchData();
     }, [filter]);
 
-    const handleInputChange = (e) => {
-        setFilter(e.target.value);
-    };
-
-    const handleItemClick = (cidade) => {
-        setValue('cidadeId', cidade.id);
-        setValue('cidade', cidade.nome);
-        setFilteredCidades([]);
-        setFilter('');
-    };
-
-    const returnValues = () => {
-        return {
-            id: watch('id') || 0,
-            nome: watch('nome'),
-            valorFrete: watch('valorFrete'),
-            isentaFrete: watch('isentaFrete'),
-            cidadeId: watch('cidadeId')
-        };
-    }
-
     return (
         <TableContainer>
             <FormContainer onSubmit={handleSubmit(onSubmit)}>
@@ -164,50 +137,28 @@ const BairroForm = () => {
                         type="text" {...register('id')} />
                 </InputContainer>
                 <InputContainer tamanho='100%'>
-                    <Label>Nome</Label>
+                    <Label>Descrição</Label>
                     <Input
-                        type="text" {...register('nome')} />
+                        type="text" {...register('descricao')} />
                 </InputContainer>
-                <InputContainer tamanho='50%'>
-                    <label htmlFor="valorFrete">Valor do frete</label>
-                    <Controller
-                        name="valorFrete"
-                        control={control}
-                        defaultValue=""
-                        render={({ field }) => (
-                            <ValorInput
-                                value={field.value}
-                                onValueChange={field.onChange} />
-                        )}
-                    />
-                </InputContainer>
-                <InputContainer tamanho='50%'>
-                    <Label>Isenta frete?</Label>
+                <InputContainer tamanho='30%'>
+                    <Label>Acessa cadastros?</Label>
                     <InputCheck
-                        type="checkbox" {...register('isentaFrete')} />
+                        type="checkbox" {...register('acessaCadastro')} />
                 </InputContainer>
-                <span {...register('cidadeId')}></span>
-                <InputContainer tamanho='100%'>
-                    <Label>Cidade</Label>
-                    <Input
-                        type="text"
-                        id='cidade'
-                        {...register('cidade')}
-                        onChange={handleInputChange}
-                    />
+                <InputContainer tamanho='30%'>
+                    <Label>Acessa financeiro?</Label>
+                    <InputCheck
+                        type="checkbox" {...register('acessaFinanceiro')} />
                 </InputContainer>
-                {filter && filteredCidades.length > 0 && (
-                    <UnodernedList>
-                        {filteredCidades.map((cidade, index) => (
-                            <Li key={index} onClick={() => handleItemClick(cidade)}>
-                                {cidade.id} - {cidade.nome}
-                            </Li>
-                        ))}
-                    </UnodernedList>
-                )}
+                <InputContainer tamanho='30%'>
+                    <Label>Acessa locação?</Label>
+                    <InputCheck
+                        type="checkbox" {...register('acessaLocacao')} />
+                </InputContainer>
             </FormContainer>
         </TableContainer>
     )
 }
 
-export default BairroForm
+export default CargoForm

@@ -130,11 +130,13 @@ const BairroGrid = () => {
                     setFilter={setIsFilter}
                     navigate={() => redirectForm()}
                     setGear={setGear}
-                    listName={['Nome', 'Valor frete', 'Isenta frete?']}
+                    listName={['', '', 'Nome', 'Valor frete', 'Isenta frete?']}
                     next={handleNext}
                     previous={handlePrevious}>
                     {paginatedBairros.map((bairro) => (
                         <Tr key={bairro.id}>
+                            <Td></Td>
+                            <Td></Td>
                             <Td onClick={() => redirectForm(bairro)}>{bairro.nome}</Td>
                             <Td onClick={() => redirectForm(bairro)}>R$ {bairro.valorFrete.toFixed(2)}</Td>
                             <Td onClick={() => redirectForm(bairro)}>{bairro.isentaFrete ? 'Sim' : 'Não'}</Td>

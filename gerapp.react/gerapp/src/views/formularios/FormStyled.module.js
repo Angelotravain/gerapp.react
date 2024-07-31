@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { FaRegCheckCircle } from "react-icons/fa";
 
 export const TabsContainer = styled.div`
     width: 100%;
@@ -81,12 +82,14 @@ export const DivButtonStyled = styled.div`
 
 export const Button = styled.button`
     height: 30px;
-    border: none;
-    background-color: ${props => props.theme.colors.hover};
-    color: ${props => props.theme.colors.texto};
+    border: ${props => props.theme.colors.border};
+    background-color: ${props => props.theme.colors.second};
     padding: 5px;
     margin: 5px;
     cursor: pointer;
+        &:hover{
+                border: 1px solid  ${props => props.theme.colors.blue};
+        }
 
 `;
 export const Container = styled.div`
@@ -157,7 +160,7 @@ export const DivList = styled.div`
     ul{
         display: flex;
         flex-direction: column;
-        width: 40%;
+        width: 100%;
         list-style: none;
         align-items: center;
 
@@ -167,8 +170,24 @@ export const DivList = styled.div`
             cursor: pointer;
                 &:hover{
                     background-color: ${props => props.theme.colors.hover};
-                    color: ${props => props.theme.colors.texto};
         }
         }
     }
+`;
+
+export const SuccessIcon = styled(FaRegCheckCircle)`
+    background-color: ${props => props.theme.colors.greenColor};
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+`;
+
+export const ReturnMessage = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 70px;
+    gap: 10px;
+    border-bottom: ${props => props.theme.colors.border};
 `;

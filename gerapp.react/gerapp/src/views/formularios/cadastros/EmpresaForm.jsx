@@ -1,10 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import {
-    Table,
-    TableContainer,
-    Th,
-    Td,
-    TableFormContainer
+    TableContainer
 } from '../../../components/Tabela/Tabela.module'
 import {
     FormContainer,
@@ -38,16 +34,13 @@ import {
 } from '../FormStyled.module';
 import MaskedInput from '../../../components/Genericos/utils/MaskedInput';
 import Image from '../../../components/Genericos/Image';
-import { formatDateCampo } from '../../../components/Genericos/utils/Formater'
 import {
     SuccessIcon,
     ReturnMessage
 } from '../FormStyled.module'
 
-const ClienteForm = () => {
-    const [bairros, setBairros] = useState([]);
+const EmpresaForm = () => {
     const [filteredBairros, setFilteredBairros] = useState([]);
-    const [enderecos, setEnderecos] = useState([]);
     const [filter, setFilter] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -55,8 +48,8 @@ const ClienteForm = () => {
     const data = location.state;
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState(0);
-    const link = 'Cliente';
-    const [imageSrc, setImageSrc] = useState('https://w7.pngwing.com/pngs/129/292/png-transparent-female-avatar-girl-face-woman-user-flat-classy-users-icon.png');
+    const link = 'Empresa';
+    const [imageSrc, setImageSrc] = useState('https://png.pngtree.com/png-vector/20190930/ourmid/pngtree-building-icon-isolated-on-abstract-background-png-image_1763153.jpg');
     const fileInputRef = useRef(null);
     const [messageReturn, setMessageReturn] = useState('');
 
@@ -119,81 +112,53 @@ const ClienteForm = () => {
     };
 
     const redirectGrid = () => {
-        navigate('/Cliente');
-    };
-
-    const addEndereco = () => {
-        const enderecoNovo = {
-            id: watch('enderecoId') || 0,
-            logradouro: watch('logradouro'),
-            numero: watch('numero'),
-            complemento: watch('complemento'),
-            cep: watch('cep'),
-            bairroId: watch('bairroId'),
-            bairro: null,
-        }
-        setEnderecos(prevEnderecos => [...prevEnderecos, enderecoNovo]);
-
-        setValue('logradouro', '');
-        setValue('numero', '');
-        setValue('complemento', '');
-        setValue('cep', '');
-        setValue('bairro', '');
-        setValue('bairroId', '');
-    };
-
-    const buscarCep = async () => {
-        try {
-            const data = await getItensById('UtilitarioCep', watch('cep'));
-            if (data) {
-                setValue('logradouro', data.logradouro);
-                setValue('complemento', data.complemento);
-                setValue('cep', data.cep);
-            }
-        } catch (err) {
-            setError(err);
-        } finally {
-            setLoading(false);
-        }
+        navigate('/Empresa');
     };
 
     useEffect(() => {
 
         if (data !== null) {
+            console.log(data);
             setValue('id', data.id);
             setValue('nome', data.nome);
             setValue('email', data.email);
+            setValue('cnpj', data.cnpj);
             setValue('telefone', data.telefone);
-            setValue('statusCliente', data.statusCliente);
-            setValue('dataNascimento', formatDateCampo(data.dataNascimento));
-            setValue('usuarioId', data.usuarioCliente.id);
-            setValue('login', data.usuarioCliente.login);
-            setImageSrc(data.imagem);
-            setValue('senha', data.usuarioCliente.senha);
-            setEnderecos(data.enderecoCliente);
+            setValue('ehFilial', data.ehFilial);
+            setValue('website', data.website);
+            setImageSrc(data.logoEmpresa || imageSrc);
+            // if()
+            // setValue('logradouro', data.enderecoEmpresa.logradouro || '');
+            // setValue('numero', data.enderecoEmpresa.numero || '');
+            // setValue('complemento', data.enderecoEmpresa.complemento || '');
+            // setValue('cep', data.enderecoEmpresa.cep || '');
+            // setValue('bairro', data.enderecoEmpresa.bairro.nome || '');
+            // setValue('bairroId', data.enderecoEmpresa.bairro.id || '');
         }
     }, []);
 
     const FormaterClient = (data) => {
-        const cliente = {
+        const empresa = {
             id: data.id || 0,
             nome: data.nome,
-            email: data.email,
+            cnpj: data.cnpj,
             telefone: data.telefone,
-            statusCliente: data.statusCliente,
-            dataNascimento: data.dataNascimento,
-            imagem: imageSrc,
-            usuarioCliente: {
-                id: data.usuarioId || 0,
-                login: data.login,
-                senha: data.senha,
-                usuarioClienteId: data.id || 0,
-                usuarioFuncionarioId: 0
-            },
-            enderecoCliente: enderecos
+            email: data.email,
+            website: data.website,
+            logoEmpresa: imageSrc,
+            ehFilial: data.ehFilial,
+            enderecoEmpresa: {
+                logradouro: data.logradouro,
+                numero: data.numero,
+                complemento: data.complemento,
+                id: data.enderecoId,
+                cep: data.cep,
+                bairro: null,
+                bairroId: data.bairroId
+            }
         };
 
-        return cliente;
+        return empresa;
     };
     useEffect(() => {
         if (filter === '') {
@@ -241,17 +206,19 @@ const ClienteForm = () => {
         };
     }
 
-    const setarEnderecos = (value) => {
-        setValue('logradouro', value ? value.logradouro : '');
-        setValue('numero', value ? value.numero : '');
-        setValue('complemento', value ? value.complemento : '');
-        setValue('cep', value ? value.cep : '');
-        setValue('bairro', value ? value.bairro.nome : '');
-        setValue('bairroId', value ? value.bairroId : '');
-        setValue('enderecoId', value ? value.id : '');
-
-        const updatedEnderecos = enderecos.filter(endereco => endereco !== value);
-        setEnderecos(updatedEnderecos);
+    const buscarCep = async () => {
+        try {
+            const data = await getItensById('UtilitarioCep', watch('cep'));
+            if (data) {
+                setValue('logradouro', data.logradouro);
+                setValue('complemento', data.complemento);
+                setValue('cep', data.cep);
+            }
+        } catch (err) {
+            setError(err);
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -267,15 +234,14 @@ const ClienteForm = () => {
                 </FormActionContainer>
                 <TabsContainer>
                     <TabList>
-                        <Tab active={activeTab === 0} onClick={() => setActiveTab(0)}>Cliente</Tab>
+                        <Tab active={activeTab === 0} onClick={() => setActiveTab(0)}>Empresa</Tab>
                         <Tab active={activeTab === 1} onClick={() => setActiveTab(1)}>Endereço</Tab>
-                        <Tab active={activeTab === 2} onClick={() => setActiveTab(2)}>Usuário</Tab>
                     </TabList>
 
                     <TabPanel active={activeTab === 0}>
                         <div>
                             <div>
-                                <Image imageSrc={imageSrc} alt='Foto do cliente' onClick={handleImageClick} />
+                                <Image imageSrc={imageSrc} alt='' onClick={handleImageClick} />
                                 <input type="file"
                                     accept="image/*"
                                     ref={fileInputRef}
@@ -287,11 +253,21 @@ const ClienteForm = () => {
                                     <Input
                                         type="text" {...register('nome')} />
                                 </InputContainer>
-                                <InputContainer tamanho='50%'>
-                                    <Label>E-mail</Label>
-                                    <Input
-                                        type="text" {...register('email')} />
-                                </InputContainer>
+                                <Controller
+                                    name="cnpj"
+                                    control={control}
+                                    defaultValue=""
+                                    render={({ field }) => (
+                                        <MaskedInput
+                                            maskEdit="99.999.999/9999-99"
+                                            value={field.value}
+                                            onChange={field.onChange}
+                                            nameInput='cnpj'
+                                            label='CNPJ'
+                                            tamanho='50%'
+                                        />
+                                    )}
+                                />
                                 <Controller
                                     name="telefone"
                                     control={control}
@@ -307,15 +283,20 @@ const ClienteForm = () => {
                                         />
                                     )}
                                 />
-                                <InputContainer tamanho='20%' display='flex'>
-                                    <Label>Ativo?</Label>
-                                    <InputCheck
-                                        type="checkbox" {...register('statusCliente')} />
-                                </InputContainer>
-                                <InputContainer tamanho='30%'>
-                                    <Label>Data de nascimento</Label>
+                                <InputContainer tamanho='50%'>
+                                    <Label>E-mail</Label>
                                     <Input
-                                        type="date" {...register('dataNascimento')} />
+                                        type="text" {...register('email')} />
+                                </InputContainer>
+                                <InputContainer tamanho='50%'>
+                                    <Label>Web site</Label>
+                                    <Input
+                                        type="text" {...register('website')} />
+                                </InputContainer>
+                                <InputContainer tamanho='10%'>
+                                    <Label>é filial?</Label>
+                                    <InputCheck
+                                        type="checkbox" {...register('ehFilial')} />
                                 </InputContainer>
                             </div>
                         </div>
@@ -338,7 +319,7 @@ const ClienteForm = () => {
                             )}
                         />
                         <ButtonInterForm onClick={(e) => { e.preventDefault(); buscarCep(); }}>Buscar CEP</ButtonInterForm>
-                        <InputContainer tamanho='40%'>
+                        <InputContainer tamanho='100%'>
                             <Label>Logradouro</Label>
                             <Input
                                 type="text" {...register('logradouro')} />
@@ -348,14 +329,14 @@ const ClienteForm = () => {
                             <Input
                                 type="text" {...register('numero')} />
                         </InputContainer>
-                        <InputContainer tamanho='100%'>
+                        <InputContainer tamanho='80%'>
                             <Label>Complemento</Label>
                             <Input
                                 type="text" {...register('complemento')} />
                         </InputContainer>
                         <span {...register('bairroId')}></span>
                         <DivList tamanho='100%'>
-                            <InputContainer tamanho='50%'>
+                            <InputContainer tamanho='100%'>
                                 <Label>Bairro</Label>
                                 <Input
                                     type="text" {...register('bairro')} onChange={handleInputChange} />
@@ -370,40 +351,6 @@ const ClienteForm = () => {
                                 </ul>
                             )}
                         </DivList>
-                        <ButtonInterForm onClick={(e) => { e.preventDefault(); addEndereco(); }}>Adicionar endereço</ButtonInterForm>
-                        <TableFormContainer>
-                            <Table>
-                                <thead>
-                                    <tr>
-                                        <Th>Logradouro</Th>
-                                        <Th>Número</Th>
-                                        <Th>Complemento</Th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {enderecos.map((endereco) => (
-                                        <tr key={endereco.id} onClick={() => setarEnderecos(endereco)}>
-                                            <Td>{endereco.logradouro}</Td>
-                                            <Td>{endereco.numero}</Td>
-                                            <Td>{endereco.complemento}</Td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </Table>
-                        </TableFormContainer>
-                    </TabPanel>
-                    <TabPanel active={activeTab === 2}>
-                        <span {...register('usuarioId')}></span>
-                        <InputContainer tamanho='100%'>
-                            <Label>Login</Label>
-                            <Input
-                                type="text" {...register('login')} />
-                        </InputContainer>
-                        <InputContainer tamanho='100%'>
-                            <Label>Senha</Label>
-                            <Input
-                                type="password" {...register('senha')} />
-                        </InputContainer>
                     </TabPanel>
                 </TabsContainer>
             </FormContainer>
@@ -411,4 +358,4 @@ const ClienteForm = () => {
     )
 }
 
-export default ClienteForm
+export default EmpresaForm

@@ -163,3 +163,9 @@ export const DivListContent = styled.div`
         display: none;
     }
 `;
+
+export const TableFormContainer = styled.div`
+    width: 100%;
+    margin: 0;
+    padding: 0;
+`;
