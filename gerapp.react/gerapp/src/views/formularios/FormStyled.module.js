@@ -7,21 +7,20 @@ export const TabsContainer = styled.div`
 export const TabList = styled.div`
   display: flex;
   align-items: center;
-  border-bottom: 1px solid #ccc;
+  border-bottom: ${props => props.theme.colors.border}
 `;
 
-export const Tab = styled.button`
+export const Tab = styled.div`
   flex: 1;
   padding: 10px 8%;
   cursor: pointer;
   border: none; 
-  background-color: ${props => props.theme.colors.texto};
-  border-top: 3px solid ${props => props.active ? props.theme.colors.hover : props.theme.colors.texto};
+  background-color: ${props => props.theme.colors.second};
+  border-bottom: 3px solid ${props => props.active ? props.theme.colors.blue : props.theme.colors.hover};
   outline: none;
-  
+  text-align: center;
   &:hover {
     background-color: ${props => props.theme.colors.hover};
-    color: ${props => props.theme.colors.texto};
   }
 `;
 
@@ -41,8 +40,8 @@ img{
             }
 `;
 export const TabPanel = styled.div`
-    display: ${props => props.active ? 'block' : 'none'};
-
+    display: ${props => props.active ? 'flex' : 'none'};
+    flex-wrap: wrap;
             table{
             width: 80%;
             align-items: center;
@@ -151,12 +150,9 @@ export const ButtonTable = styled.button`
 `;
 
 export const DivList = styled.div`
-    width: 90%;
-    margin: 15px;
-    height: 190px;
+    width: ${props => props.tamanho || '100%'};
     overflow-y: auto;
     overflow-x: hidden;
-    padding: 10px;
 
     ul{
         display: flex;

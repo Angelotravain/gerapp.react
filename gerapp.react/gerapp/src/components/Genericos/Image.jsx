@@ -1,9 +1,9 @@
 import React from 'react'
-import { ImgAvatar } from '../formularios/FormStyled.module'
+import { ImgAvatar } from '../../views/formularios/FormStyled.module'
 
 const Image = ({ imageSrc, alt, onClick }) => {
     return (
-        <ImgAvatar >
+        <ImgAvatar>
             <img src={imageSrc} alt={alt} onClick={onClick} />
         </ImgAvatar>
     )

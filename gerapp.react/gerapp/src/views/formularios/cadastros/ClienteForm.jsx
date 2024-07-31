@@ -1,24 +1,44 @@
-import React, { useState, useEffect } from 'react';
-import FormStyled from '../FormStyled'
-import { getItens } from '../../data/cadastros/CrudGeneric';
+import React, { useState, useEffect } from 'react'
+import { TableContainer } from '../../../components/Tabela/Tabela.module'
+import {
+    FormContainer,
+    FormActionContainer,
+    UnodernedList,
+    Li
+} from '../../../components/form/Form.module';
+import { ButtonForm } from '../../../components/button/Button.module'
+import {
+    InputCheck,
+    InputContainer,
+    Input,
+    Label
+} from '../../../components/Input/Input.module'
 import { useForm, Controller } from "react-hook-form";
-import { useLocation } from 'react-router-dom';
-import MaskedInput from '../../genericos/utils/MaskedInput';
-import InputStyled from '../../genericos/utils/InputStyled';
+import {
+    useLocation,
+    useNavigate
+} from 'react-router-dom';
+import {
+    getItens,
+    updateItem,
+    insertItem
+} from '../../../services/httpRequest';
+import ValorInput from '../../../components/Genericos/utils/ValorInput';
 import {
     TabsContainer,
     TabList,
     Tab,
     TabPanel,
-    ImgAvatar,
-    DivButtonStyled,
     Button,
     DivList
-} from '../FormStyled.module'
-import Image from '../../genericos/Image';
-import InputCheckbox from '../../genericos/utils/InputCheckbox'
+} from '../FormStyled.module';
+import MaskedInput from '../../../components/Genericos/utils/MaskedInput';
+import InputStyled from '../../../components/Genericos/utils/InputStyled';
+import Image from '../../../components/Genericos/Image';
+import InputCheckbox from '../../../components/Genericos/utils/InputCheckbox'
 
 const ClienteForm = () => {
+    const [bairros, setBairros] = useState([]);
     const [filteredBairros, setFilteredBairros] = useState([]);
     const [enderecos, setEnderecos] = useState([]);
     const [filter, setFilter] = useState('');
@@ -26,16 +46,74 @@ const ClienteForm = () => {
     const [error, setError] = useState(null);
     const location = useLocation();
     const data = location.state;
+    const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState(0);
     const [imageSrc, setImageSrc] = useState('https://w7.pngwing.com/pngs/129/292/png-transparent-female-avatar-girl-face-woman-user-flat-classy-users-icon.png');
     const fileInputRef = React.createRef();
     const {
         register,
+        control,
         watch,
         setValue,
-        control,
+        handleSubmit,
         formState: { errors },
+        reset
     } = useForm()
+
+    const onSubmit = async (formData) => {
+        try {
+            const link = 'Cliente';
+            const { cidade, ...filteredData } = formData;
+
+            filteredData.id = +filteredData.id || 0;
+            filteredData.valorFrete = +filteredData.valorFrete;
+
+            const data = JSON.stringify(filteredData);
+
+            if (filteredData.id !== 0) {
+                console.log('update', data);
+                await updateItem({ link, id: filteredData.id, item: data });
+            } else {
+                console.log('inserir', data);
+                await insertItem({ link, item: data });
+            }
+
+            reset();
+        } catch (error) {
+            console.error('Error submitting form', error);
+        }
+    };
+
+    const handleImageClick = () => {
+        fileInputRef.current.click();
+    };
+
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                setImageSrc(e.target.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const redirectGrid = () => {
+        navigate('/Cliente');
+    };
+
+    const addEndereco = () => {
+        const enderecoNovo = {
+            logradouro: watch('logradouro'),
+            numero: watch('numero'),
+            complemento: watch('complemento'),
+            cep: watch('cep'),
+            bairroId: watch('bairroId'),
+        }
+        setEnderecos(prevEnderecos => [...prevEnderecos, enderecoNovo]);
+        setarEnderecos(null);
+    };
 
     useEffect(() => {
 
@@ -50,12 +128,6 @@ const ClienteForm = () => {
             setValue('nomePai', data.nomePai);
             setValue('nomeConjugue', data.nomeConjugue);
             setValue('dataNascimento', data.dataNascimento);
-            setValue('logradouro', data.enderecoCliente[0].logradouro);
-            setValue('numero', data.enderecoCliente[0].numero);
-            setValue('complemento', data.enderecoCliente[0].complemento);
-            setValue('cep', data.enderecoCliente[0].cep);
-            setValue('bairro', data.enderecoCliente[0].bairro.nome);
-            setValue('bairroId', data.enderecoCliente[0].bairro.id);
             setValue('login', data.usuarioCliente.login);
             setValue('senha', data.usuarioCliente.senha);
             setEnderecos(data.enderecoCliente);
@@ -87,53 +159,13 @@ const ClienteForm = () => {
         fetchData();
     }, [filter]);
 
-    const addEndereco = () => {
-        const enderecoNovo = {
-            logradouro: watch('logradouro'),
-            numero: watch('numero'),
-            complemento: watch('complemento'),
-            cep: watch('cep'),
-            bairroId: watch('bairroId'),
-        }
-        setEnderecos(prevEnderecos => [...prevEnderecos, enderecoNovo]);
-        setarEnderecos(null);
-    };
-
-    const handleImageClick = () => {
-        fileInputRef.current.click();
-    };
-
-    const handleFileChange = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                setImageSrc(e.target.result);
-            };
-            reader.readAsDataURL(file);
-        }
-    };
-
-    const setarEnderecos = (value) => {
-        setValue('logradouro', value ? value.logradouro : '');
-        setValue('numero', value ? value.numero : '');
-        setValue('complemento', value ? value.complemento : '');
-        setValue('cep', value ? value.cep : '');
-        setValue('bairro', value ? value.bairro.nome : '');
-        setValue('bairroId', value ? value.bairroId : '');
-        console.log(value);
-
-        const updatedEnderecos = enderecos.filter(endereco => endereco !== value);
-        setEnderecos(updatedEnderecos);
-    };
-
     const handleInputChange = (e) => {
         setFilter(e.target.value);
     };
 
-    const handleItemClick = (bairro) => {
-        setValue('bairroId', bairro.id);
-        setValue('bairro', bairro.nome);
+    const handleItemClick = (cidade) => {
+        setValue('cidadeId', cidade.id);
+        setValue('cidade', cidade.nome);
         setFilteredBairros([]);
         setFilter('');
     };
@@ -148,146 +180,154 @@ const ClienteForm = () => {
         };
     }
 
-
-    const handleSubmit = () => {
-
-    }
-
     return (
-        <FormStyled linkReturn={'/Cliente'} nameLinkReturn={'Cliente'} data={[]} linkSaveOrEdit={'Cliente'} model={returnValues()}>
-            <TabsContainer>
-                <TabList>
-                    <Tab active={activeTab === 0} onClick={() => setActiveTab(0)}>Cliente</Tab>
-                    <Tab active={activeTab === 1} onClick={() => setActiveTab(1)}>Endereço</Tab>
-                    <Tab active={activeTab === 2} onClick={() => setActiveTab(2)}>Usuário</Tab>
-                </TabList>
+        <TableContainer>
+            <FormContainer>
+                <FormActionContainer>
+                    <ButtonForm onClick={redirectGrid}>Voltar</ButtonForm>
+                    <ButtonForm save={true}>Enviar</ButtonForm>
+                </FormActionContainer>
+                <TabsContainer>
+                    <TabList>
+                        <Tab active={activeTab === 0} onClick={() => setActiveTab(0)}>Cliente</Tab>
+                        <Tab active={activeTab === 1} onClick={() => setActiveTab(1)}>Endereço</Tab>
+                        <Tab active={activeTab === 2} onClick={() => setActiveTab(2)}>Usuário</Tab>
+                    </TabList>
 
-                <TabPanel active={activeTab === 0}>
-                    <div>
+                    <TabPanel active={activeTab === 0}>
                         <div>
-                            <Image imageSrc={imageSrc} alt='Foto do cliente' onClick={handleImageClick} />
-                            <input type="file"
-                                accept="image/*"
-                                ref={fileInputRef}
-                                onChange={handleFileChange}
-                                style={{ display: 'none' }} />
-                            <InputStyled type="text" label='Código' id='id' {...register('id')} display='none' />
-                            <InputStyled type="text" label='Nome' id='nome' {...register('nome')} tamanho='80vw' />
-                            <InputStyled type="email" label='E-mail' id='email' {...register('email')} tamanho='80vw' />
-                            <Controller
-                                name="cpf"
-                                control={control}
-                                defaultValue=""
-                                render={({ field }) => (
-                                    <MaskedInput
-                                        maskEdit="999.999.999-99"
-                                        value={field.value}
-                                        onChange={field.onChange}
-                                        nameInput='CPF'
-                                        tamanho='100%'
-                                        label='CPF'
-                                    />
-                                )}
-                            />
-                            <Controller
-                                name="telefone"
-                                control={control}
-                                defaultValue=""
-                                render={({ field }) => (
-                                    <MaskedInput
-                                        maskEdit="(99) 99999-9999"
-                                        value={field.value}
-                                        onChange={field.onChange}
-                                        nameInput='Telefone'
-                                        tamanho='100%'
-                                        label='Telefone'
-                                    />
-                                )}
-                            />
-                            <InputCheckbox type="checkbox" label='Ativo?' id='statusCliente' {...register('statusCliente')} tamanho='40px' />
-                            <InputStyled id='nomeMae' label='Nome da mãe' type='text' {...register('nomeMae')} tamanho='80vw' />
-                            <InputStyled type="text" id='nomePai' label='Nome do Pai' {...register('nomePai')} tamanho='80vw' />
-                            <InputStyled type="text" id='nomeConjugue' label='Nome Conjuguê' {...register('nomeConjugue')} tamanho='80vw' />
-                            <InputStyled id='dataNascimento' label='data de nascimento' type='date' {...register('dataNascimento')} />
+                            <div>
+                                <Image imageSrc={imageSrc} alt='Foto do cliente' onClick={handleImageClick} />
+                                <input type="file"
+                                    accept="image/*"
+                                    ref={fileInputRef}
+                                    onChange={handleFileChange}
+                                    style={{ display: 'none' }} />
+                                <span {...register('id')}></span>
+                                <InputContainer tamanho='50%'>
+                                    <Label>Nome</Label>
+                                    <Input
+                                        type="text" {...register('nome')} />
+                                </InputContainer>
+                                <InputContainer tamanho='50%'>
+                                    <Label>E-mail</Label>
+                                    <Input
+                                        type="text" {...register('email')} />
+                                </InputContainer>
+                                <Controller
+                                    name="telefone"
+                                    control={control}
+                                    defaultValue=""
+                                    render={({ field }) => (
+                                        <MaskedInput
+                                            maskEdit="(99) 99999-9999"
+                                            value={field.value}
+                                            onChange={field.onChange}
+                                            nameInput='Telefone'
+                                            tamanho='50%'
+                                            label='Telefone'
+                                        />
+                                    )}
+                                />
+                                <InputContainer tamanho='10%'>
+                                    <Label>Ativo?</Label>
+                                    <InputCheck
+                                        type="checkbox" {...register('statusCliente')} />
+                                </InputContainer>
+                                <InputContainer tamanho='40%'>
+                                    <Label>Data de nascimento</Label>
+                                    <Input
+                                        type="date" {...register('dataNascimento')} />
+                                </InputContainer>
+                            </div>
                         </div>
-                    </div>
-                </TabPanel>
+                    </TabPanel>
+                    <TabPanel active={activeTab === 1}>
+                        <Controller
+                            name="cep"
+                            control={control}
+                            defaultValue=""
+                            render={({ field }) => (
+                                <MaskedInput
+                                    maskEdit="99999-999"
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                    nameInput='CEP'
+                                    label='CEP'
+                                    tamanho='50%'
+                                />
+                            )}
+                        />
+                        <InputContainer tamanho='50%'>
+                            <Label>Logradouro</Label>
+                            <Input
+                                type="text" {...register('logradouro')} />
+                        </InputContainer>
+                        <InputContainer tamanho='20%'>
+                            <Label>Número</Label>
+                            <Input
+                                type="text" {...register('numero')} />
+                        </InputContainer>
+                        <InputContainer tamanho='80%'>
+                            <Label>Complemento</Label>
+                            <Input
+                                type="text" {...register('complemento')} />
+                        </InputContainer>
+                        <span {...register('bairroId')}></span>
+                        <DivList tamanho='100%'>
+                            <InputContainer tamanho='100%'>
+                                <Label>Bairro</Label>
+                                <Input
+                                    type="text" {...register('bairro')} onChange={handleInputChange} />
+                            </InputContainer>
+                            {filter && filteredBairros.length > 0 && (
 
-                <TabPanel active={activeTab === 1}>
-                    <div>
-                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                            <Controller
-                                name="cep"
-                                control={control}
-                                defaultValue=""
-                                render={({ field }) => (
-                                    <MaskedInput
-                                        maskEdit="99999-999"
-                                        value={field.value}
-                                        onChange={field.onChange}
-                                        nameInput='CEP'
-                                        label='CEP'
-                                        tamanho='50vw'
-                                    />
-                                )}
-                            />
-                            <Button>buscar CEP</Button>
-                        </div>
+                                <ul>
+                                    {filteredBairros.map((cidade, index) => (
+                                        <li key={index} onClick={() => handleItemClick(cidade)}>
+                                            {cidade.id} - {cidade.nome}
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
+                        </DivList>
                         <div>
-                            <InputStyled id='logradouro' label='Logradouro' type='text' {...register('logradouro')} required:true tamanho='80vw' />
-                            <InputStyled id='numero' label='Número' type='text' {...register('numero')} tamanho='15vw' />
-                            <InputStyled id='complemento' label='Complemento' type='text' {...register('complemento')} tamanho='65vw' />
-                            <label htmlFor="bairro"></label>
-                            <span {...register('bairroId')}></span>
-                            <DivList>
-                                <InputStyled id='bairro' label='Bairro' type='text' {...register('bairro')} onChange={handleInputChange} tamanho='60vw' />
-                                {filter && filteredBairros.length > 0 && (
-
-                                    <ul>
-                                        {filteredBairros.map((cidade, index) => (
-                                            <li key={index} onClick={() => handleItemClick(cidade)}>
-                                                {cidade.id} - {cidade.nome}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                )}
-                            </DivList>
-                        </div>
-                    </div>
-                    <div>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Logradouro</th>
-                                    <th>Número</th>
-                                    <th>Complemento</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {enderecos.map((endereco) => (
-                                    <tr onClick={() => setarEnderecos(endereco)}>
-                                        <td>{endereco.logradouro}</td>
-                                        <td>{endereco.numero}</td>
-                                        <td>{endereco.complemento}</td>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Logradouro</th>
+                                        <th>Número</th>
+                                        <th>Complemento</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                        <Button onClick={addEndereco}>Adicionar endereço</Button>
-                    </div>
-                </TabPanel>
-                <TabPanel active={activeTab === 2}>
-                    <div >
-                        <div>
-                            <InputStyled id='login' label='Login' type='text' {...register('login')} />
+                                </thead>
+                                <tbody>
+                                    {enderecos.map((endereco) => (
+                                        <tr onClick={() => setarEnderecos(endereco)}>
+                                            <td>{endereco.logradouro}</td>
+                                            <td>{endereco.numero}</td>
+                                            <td>{endereco.complemento}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                            <Button onClick={addEndereco}>Adicionar endereço</Button>
                         </div>
-                        <div>
-                            <InputStyled id='senha' label='Senha' type='password' {...register('senha')} />
-                        </div>
-                    </div>
-                </TabPanel>
-            </TabsContainer>
-        </FormStyled>
+                    </TabPanel>
+                    <TabPanel active={activeTab === 2}>
+                        <InputContainer tamanho='100%'>
+                            <Label>Login</Label>
+                            <Input
+                                type="text" {...register('login')} />
+                        </InputContainer>
+                        <InputContainer tamanho='100%'>
+                            <Label>Senha</Label>
+                            <Input
+                                type="password" {...register('senha')} />
+                        </InputContainer>
+                    </TabPanel>
+                </TabsContainer>
+            </FormContainer>
+        </TableContainer>
     )
 }
 

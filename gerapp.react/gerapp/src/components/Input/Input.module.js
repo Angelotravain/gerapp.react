@@ -14,6 +14,19 @@ export const InputContainer = styled.div`
     padding: 5px;
 `;
 
+export const ButtonInterForm = styled.button`
+    height: 35px;
+    margin: 15px;
+    background-color: ${props => props.theme.colors.second};
+    border: ${props => props.theme.colors.border};
+    transition: border-color 0.3s;
+    cursor: pointer;
+
+    &:hover{
+        border-color: ${props => props.theme.colors.blue};
+    }
+`;
+
 export const Input = styled.input`
     width: 100%;
     height: 35px;

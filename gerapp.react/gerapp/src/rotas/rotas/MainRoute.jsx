@@ -14,6 +14,7 @@ import VeiculoGrid from '../../views/Cadastros/Veiculo/VeiculoGrid';
 import LocacoesGrid from '../../views/Cadastros/Locacoes/LocacoesGrid';
 import ContaAReceberGrid from '../../views/Cadastros/ContaReceber/ContaAReceberGrid';
 import Dashboard from '../../views/tabelas/Home/Dashboard'
+import ClienteForm from '../../views/formularios/cadastros/ClienteForm';
 
 const MainContainer = styled.div`
     z-index: 0;
@@ -45,6 +46,7 @@ const MainRoute = ({ isOpen }) => {
 
                     {/* Rotas de formulário */}
                     <Route path='/Bairro_form' element={<BairroForm />} />
+                    <Route path='/Cliente_form' element={<ClienteForm />} />
                 </Routes>
             </Router>
         </MainContainer>
