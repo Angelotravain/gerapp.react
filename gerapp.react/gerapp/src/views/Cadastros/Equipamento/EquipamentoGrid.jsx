@@ -141,7 +141,7 @@ const EquipamentoGrid = () => {
                     {paginatedEquipamentos.map((equipamento) => (
                         <Tr key={equipamento.id}>
                             <Td onClick={() => redirectForm(equipamento)}>{equipamento.descricao}</Td>
-                            <Td onClick={() => redirectForm(equipamento)}>{equipamento.tipoEquipamentoId}</Td>
+                            <Td onClick={() => redirectForm(equipamento)}>{equipamento.tipoEquipamento.descricao}</Td>
                             <Td onClick={() => redirectForm(equipamento)}>{equipamento.quantidade}</Td>
                             <Td onClick={() => redirectForm(equipamento)}>R$ {equipamento.valorUnitario.toFixed(2)}</Td>
                             <Td onClick={() => redirectForm(equipamento)}>{equipamento.estaDisponivel ? 'Sim' : 'Não'}</Td>

@@ -143,8 +143,8 @@ const FuncionarioGrid = () => {
                             <Td onClick={() => redirectForm(funcionario)}><ImgAvatarTable src={funcionario.imagem} /></Td>
                             <Td onClick={() => redirectForm(funcionario)}>{funcionario.nome}</Td>
                             <Td onClick={() => redirectForm(funcionario)}>R$ {funcionario.salario.toFixed(2)}</Td>
-                            <Td onClick={() => redirectForm(funcionario)}>{funcionario.empresaId}</Td>
-                            <Td onClick={() => redirectForm(funcionario)}>{funcionario.cargoId}</Td>
+                            <Td onClick={() => redirectForm(funcionario)}>{funcionario.empresa.nome}</Td>
+                            <Td onClick={() => redirectForm(funcionario)}>{funcionario.cargo.descricao}</Td>
                             <Td>
                                 <ButtonDelete onClick={() => { setId(funcionario.id); handleDeleteClick(); setGear(false); setIsFilter(false) }} />
                             </Td>
