@@ -26,17 +26,12 @@ import {
     ReturnMessage
 } from '../FormStyled.module'
 
-const CargoForm = () => {
-    const [cidades, setCidades] = useState([]);
-    const [filteredCidades, setFilteredCidades] = useState([]);
-    const [filter, setFilter] = useState('');
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
+const FormaPagamentoForm = () => {
     const location = useLocation();
     const data = location.state;
     const [messageReturn, setMessageReturn] = useState('');
     const navigate = useNavigate();
-    const link = 'Cargo';
+    const link = 'FormaPagamento';
 
     const {
         register,
@@ -50,6 +45,8 @@ const CargoForm = () => {
 
     const onSubmit = async (formData) => {
         try {
+
+            console.log(handleSubmit);
             const data = JSON.stringify(formData);
             const { cidade, ...filteredData } = formData;
 
@@ -65,7 +62,7 @@ const CargoForm = () => {
                     redirectGrid();
                 }, 3000);
             } else {
-                console.log('inserir', data);
+                console.log('inserir', filteredData);
                 await insertItem({ link, item: filteredData });
 
                 setMessageReturn('Inserido com suceso!');
@@ -82,43 +79,18 @@ const CargoForm = () => {
     };
 
     const redirectGrid = () => {
-        navigate('/Cargo');
+        navigate('/FormaPagamento');
     };
 
     useEffect(() => {
         if (data !== null) {
             setValue('id', data.id);
             setValue('descricao', data.descricao);
-            setValue('acessaCadastro', data.acessaCadastro);
-            setValue('acessaFinanceiro', data.acessaFinanceiro);
-            setValue('acessaLocacao', data.acessaLocacao);
+            setValue('ehCredito', data.ehCredito);
+            setValue('ehDebito', data.ehDebito);
+            setValue('ehAvista', data.ehAvista);
         }
     }, []);
-
-    useEffect(() => {
-        if (filter === '') {
-            setFilteredCidades([]);
-            return;
-        }
-
-        const fetchData = async () => {
-            setLoading(true);
-            try {
-                const data = await getItens('Cidade');
-                const filtered = data.filter(cidade =>
-                    cidade.nome.toLowerCase().includes(filter.toLowerCase()) ||
-                    cidade.id.toString().includes(filter)
-                );
-                setFilteredCidades(filtered);
-            } catch (err) {
-                setError(err);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchData();
-    }, [filter]);
 
     return (
         <TableContainer>
@@ -142,23 +114,23 @@ const CargoForm = () => {
                         type="text" {...register('descricao')} />
                 </InputContainer>
                 <InputContainer tamanho='30%'>
-                    <Label>Acessa cadastros?</Label>
+                    <Label>Crédito?</Label>
                     <InputCheck
-                        type="checkbox" {...register('acessaCadastro')} />
+                        type="checkbox" {...register('ehCredito')} />
                 </InputContainer>
                 <InputContainer tamanho='30%'>
-                    <Label>Acessa financeiro?</Label>
+                    <Label>Débito?</Label>
                     <InputCheck
-                        type="checkbox" {...register('acessaFinanceiro')} />
+                        type="checkbox" {...register('ehDebito')} />
                 </InputContainer>
                 <InputContainer tamanho='30%'>
-                    <Label>Acessa locação?</Label>
+                    <Label>A vista?</Label>
                     <InputCheck
-                        type="checkbox" {...register('acessaLocacao')} />
+                        type="checkbox" {...register('ehAvista')} />
                 </InputContainer>
             </FormContainer>
         </TableContainer>
     )
 }
 
-export default CargoForm
+export default FormaPagamentoForm

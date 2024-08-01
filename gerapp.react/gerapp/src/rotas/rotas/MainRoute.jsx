@@ -17,6 +17,8 @@ import Dashboard from '../../views/tabelas/Home/Dashboard'
 import ClienteForm from '../../views/formularios/cadastros/ClienteForm';
 import CargoForm from '../../views/formularios/cadastros/CargoForm';
 import EmpresaForm from '../../views/formularios/cadastros/EmpresaForm';
+import FuncionarioForm from '../../views/formularios/cadastros/FuncionarioForm';
+import FormaPagamentoForm from '../../views/formularios/financeiro/FormaPagamentoForm';
 
 const MainContainer = styled.div`
     z-index: 0;
@@ -51,6 +53,7 @@ const MainRoute = ({ isOpen }) => {
                     <Route path='/Cliente_form' element={<ClienteForm />} />
                     <Route path='/Cargo_form' element={<CargoForm />} />
                     <Route path='/Empresa_form' element={<EmpresaForm />} />
+                    <Route path='/FormaPagamento_form' element={<FormaPagamentoForm />} />
                 </Routes>
             </Router>
         </MainContainer>
