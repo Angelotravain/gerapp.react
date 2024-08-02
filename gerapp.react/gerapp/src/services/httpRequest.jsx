@@ -51,7 +51,6 @@ export const updateItem = async ({ link, id, item }) => {
 };
 
 export const insertItem = async ({ link, item }) => {
-    console.log('no insert', link, item);
     try {
         const response = await api.post(link, item);
         return response.data;

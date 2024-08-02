@@ -1,16 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Input } from '../../Input/Input.module';
 
 const ValorInput = ({ value, onValueChange }) => {
     const [inputValue, setInputValue] = useState(value);
 
     const formatValue = (value) => {
+
         const cleanValue = value.replace(/[^\d]/g, '');
         const integerPart = cleanValue.slice(0, -2).replace(/^0+/, '') || '0';
         const decimalPart = cleanValue.slice(-2).padStart(2, '0');
         const formattedValue = `${integerPart},${decimalPart}`;
         return `R$ ${formattedValue}`;
     };
+
+    useEffect(() => {
+        if (value !== undefined && value !== null) {
+            setInputValue(formatValue(value));
+        }
+    }, [value]);
 
     const handleChange = (event) => {
         let newValue = event.target.value;

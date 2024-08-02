@@ -21,6 +21,7 @@ import FuncionarioForm from '../../views/formularios/cadastros/FuncionarioForm';
 import FormaPagamentoForm from '../../views/formularios/financeiro/FormaPagamentoForm';
 import VeiculoForm from '../../views/formularios/locacao/VeiculoForm';
 import TipoEquipamentoForm from '../../views/formularios/locacao/TipoEquipamentoForm';
+import EquipamentoForm from '../../views/formularios/locacao/EquipamentoForm';
 
 const MainContainer = styled.div`
     z-index: 0;
@@ -58,6 +59,7 @@ const MainRoute = ({ isOpen }) => {
                     <Route path='/FormaPagamento_form' element={<FormaPagamentoForm />} />
                     <Route path='/Veiculo_form' element={<VeiculoForm />} />
                     <Route path='/TipoEquipamento_form' element={<TipoEquipamentoForm />} />
+                    <Route path='/Equipamento_form' element={<EquipamentoForm />} />
                 </Routes>
             </Router>
         </MainContainer>

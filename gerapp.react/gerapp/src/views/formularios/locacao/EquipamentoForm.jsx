@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { TableContainer } from '../../../components/Tabela/Tabela.module'
 import {
     FormContainer,
@@ -28,17 +28,19 @@ import {
     SuccessIcon,
     ReturnMessage
 } from '../FormStyled.module'
+import Image from '../../../components/Genericos/Image';
 
-const BairroForm = () => {
-    const [cidades, setCidades] = useState([]);
-    const [filteredCidades, setFilteredCidades] = useState([]);
-    const [filter, setFilter] = useState('');
+const EquipamentoForm = () => {
+    const [filteredCidades, setFilteredTipoEquipamento] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [filter, setFilter] = useState('');
     const [error, setError] = useState(null);
     const location = useLocation();
     const data = location.state;
     const [messageReturn, setMessageReturn] = useState('');
     const navigate = useNavigate();
+    const [imageSrc, setImageSrc] = useState('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8lRbS7eKYzDq-Ftxc1p8G_TTw2unWBMEYUw&s');
+    const fileInputRef = useRef(null);
 
     const {
         register,
@@ -52,16 +54,17 @@ const BairroForm = () => {
 
     const onSubmit = async (formData) => {
         try {
-            const link = 'Bairro';
+            const link = 'Equipamento';
             const { cidade, ...filteredData } = formData;
 
             filteredData.id = +filteredData.id || 0;
-            filteredData.valorFrete = +filteredData.valorFrete;
+            filteredData.imagem = imageSrc;
+            filteredData.tipoEquipamento = null;
 
             const data = JSON.stringify(filteredData);
 
             if (filteredData.id !== 0) {
-                console.log('update', data);
+
                 await updateItem({ link, id: filteredData.id, item: data });
 
                 setMessageReturn('Editado com suceso!');
@@ -70,8 +73,7 @@ const BairroForm = () => {
                     redirectGrid();
                 }, 3000);
             } else {
-                console.log('inserir', data);
-                await insertItem({ link, item: data });
+                await insertItem({ link, item: filteredData });
 
                 setMessageReturn('Inserido com suceso!');
 
@@ -87,36 +89,40 @@ const BairroForm = () => {
     };
 
     const redirectGrid = () => {
-        navigate('/Bairro');
+        navigate('/Equipamentos');
     };
 
     useEffect(() => {
         console.log(data);
+
         if (data !== null) {
+            console.log('retorno dados', data);
             setValue('id', data.id);
-            setValue('nome', data.nome);
-            setValue('isentaFrete', data.isentaFrete);
-            setValue('valorFrete', data.valorFrete.toFixed(2).toString());
-            setValue('cidade', data.cidade.nome);
-            setValue('cidadeId', data.cidade.id);
+            setValue('descricao', data.descricao);
+            setValue('valorUnitario', data.valorUnitario.toFixed(2));
+            setValue('tipoEquipamento', data.tipoEquipamento.descricao);
+            setValue('tipoEquipamentoId', data.tipoEquipamento.id);
+            setValue('quantidade', data.quantidade);
+            setValue('estaDisponivel', data.estaDisponivel);
+            setImageSrc(data.imagem);
         }
     }, []);
 
     useEffect(() => {
         if (filter === '') {
-            setFilteredCidades([]);
+            setFilteredTipoEquipamento([]);
             return;
         }
 
         const fetchData = async () => {
             setLoading(true);
             try {
-                const data = await getItens('Cidade');
-                const filtered = data.filter(cidade =>
-                    cidade.nome.toLowerCase().includes(filter.toLowerCase()) ||
-                    cidade.id.toString().includes(filter)
+                const data = await getItens('TipoEquipamento');
+                const filtered = data.filter(tipoEquipamento =>
+                    tipoEquipamento.descricao.toLowerCase().includes(filter.toLowerCase()) ||
+                    tipoEquipamento.id.toString().includes(filter)
                 );
-                setFilteredCidades(filtered);
+                setFilteredTipoEquipamento(filtered);
             } catch (err) {
                 setError(err);
             } finally {
@@ -131,22 +137,27 @@ const BairroForm = () => {
         setFilter(e.target.value);
     };
 
-    const handleItemClick = (cidade) => {
-        setValue('cidadeId', cidade.id);
-        setValue('cidade', cidade.nome);
-        setFilteredCidades([]);
+    const handleItemClick = (tipoEquipamento) => {
+        setValue('tipoEquipamentoId', tipoEquipamento.id);
+        setValue('tipoEquipamento', tipoEquipamento.descricao);
+        setFilteredTipoEquipamento([]);
         setFilter('');
     };
 
-    const returnValues = () => {
-        return {
-            id: watch('id') || 0,
-            nome: watch('nome'),
-            valorFrete: watch('valorFrete'),
-            isentaFrete: watch('isentaFrete'),
-            cidadeId: watch('cidadeId')
-        };
-    }
+    const handleImageClick = () => {
+        fileInputRef.current.click();
+    };
+
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                setImageSrc(e.target.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
 
     return (
         <TableContainer>
@@ -159,49 +170,63 @@ const BairroForm = () => {
                     <ButtonForm onClick={redirectGrid}>Voltar</ButtonForm>
                     <ButtonForm save={true}>Enviar</ButtonForm>
                 </FormActionContainer>
+                <InputContainer tamanho='100%'>
+                    <Image imageSrc={imageSrc} alt='Foto do veiculo' onClick={handleImageClick} />
+                    <input type="file"
+                        accept="image/*"
+                        ref={fileInputRef}
+                        onChange={handleFileChange}
+                        style={{ display: 'none' }} />
+                </InputContainer>
                 <InputContainer tamanho='100%' visible='none'>
                     <Label>Id</Label>
                     <Input
                         type="text" {...register('id')} />
                 </InputContainer>
                 <InputContainer tamanho='100%'>
-                    <Label>Nome</Label>
+                    <Label>Descrição</Label>
                     <Input
-                        type="text" {...register('nome')} />
+                        type="text" {...register('descricao')} />
                 </InputContainer>
                 <InputContainer tamanho='50%'>
-                    <label htmlFor="valorFrete">Valor do frete</label>
+                    <Label>Quantidade</Label>
+                    <Input
+                        type="number" {...register('quantidade')} />
+                </InputContainer>
+                <InputContainer tamanho='50%'>
+                    <label htmlFor="valorUnitario">Valor do frete</label>
                     <Controller
-                        name="valorFrete"
+                        name="valorUnitario"
                         control={control}
-                        defaultValue=""
+                        defaultValue=''
                         render={({ field }) => (
                             <ValorInput
                                 value={field.value}
-                                onValueChange={field.onChange} />
+                                onValueChange={field.onChange}
+                            />
                         )}
                     />
                 </InputContainer>
                 <InputContainer tamanho='50%'>
-                    <Label>Isenta frete?</Label>
+                    <Label>Está disponível?</Label>
                     <InputCheck
-                        type="checkbox" {...register('isentaFrete')} />
+                        type="checkbox" {...register('estaDisponivel')} />
                 </InputContainer>
-                <span {...register('cidadeId')}></span>
+                <span {...register('tipoEquipamentoId')}></span>
                 <InputContainer tamanho='100%'>
-                    <Label>Cidade</Label>
+                    <Label>Tipo de equipamento</Label>
                     <Input
                         type="text"
-                        id='cidade'
-                        {...register('cidade')}
+                        id='tipoEquipamento'
+                        {...register('tipoEquipamento')}
                         onChange={handleInputChange}
                     />
                 </InputContainer>
                 {filter && filteredCidades.length > 0 && (
                     <UnodernedList>
-                        {filteredCidades.map((cidade, index) => (
-                            <Li key={index} onClick={() => handleItemClick(cidade)}>
-                                {cidade.id} - {cidade.nome}
+                        {filteredCidades.map((tipoEquipamento, index) => (
+                            <Li key={index} onClick={() => handleItemClick(tipoEquipamento)}>
+                                {tipoEquipamento.id} - {tipoEquipamento.descricao}
                             </Li>
                         ))}
                     </UnodernedList>
@@ -211,4 +236,4 @@ const BairroForm = () => {
     )
 }
 
-export default BairroForm
+export default EquipamentoForm
