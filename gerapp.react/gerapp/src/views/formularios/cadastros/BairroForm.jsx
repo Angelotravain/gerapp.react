@@ -167,7 +167,7 @@ const BairroForm = () => {
                 <InputContainer tamanho='100%'>
                     <Label>Nome</Label>
                     <Input
-                        type="text" {...register('nome')} />
+                        type="text" {...register('nome')} maxLength='50' />
                 </InputContainer>
                 <InputContainer tamanho='50%'>
                     <label htmlFor="valorFrete">Valor do frete</label>

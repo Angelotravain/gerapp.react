@@ -139,7 +139,7 @@ const CargoForm = () => {
                 <InputContainer tamanho='100%'>
                     <Label>Descrição</Label>
                     <Input
-                        type="text" {...register('descricao')} />
+                        type="text" {...register('descricao')} maxLength='80' />
                 </InputContainer>
                 <InputContainer tamanho='30%'>
                     <Label>Acessa cadastros?</Label>

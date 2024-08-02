@@ -1,10 +1,12 @@
 import styled from 'styled-components';
 
 export const InputCheck = styled.input.attrs({ type: 'checkbox' })`
-    margin: 0 auto;
     accent-color: ${props => props.theme.colors.blue};
-    width: 1.2rem;
-    height: 1.2rem;
+    width: 1rem;
+    height: 1rem;
+    display: block;
+    margin-left: 15%;
+    margin-top: 3%;
 `;
 
 export const InputContainer = styled.div`

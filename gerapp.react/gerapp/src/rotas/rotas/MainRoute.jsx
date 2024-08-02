@@ -60,6 +60,7 @@ const MainRoute = ({ isOpen }) => {
                     <Route path='/Veiculo_form' element={<VeiculoForm />} />
                     <Route path='/TipoEquipamento_form' element={<TipoEquipamentoForm />} />
                     <Route path='/Equipamento_form' element={<EquipamentoForm />} />
+                    <Route path='/Funcionario_form' element={<FuncionarioForm />} />
                 </Routes>
             </Router>
         </MainContainer>

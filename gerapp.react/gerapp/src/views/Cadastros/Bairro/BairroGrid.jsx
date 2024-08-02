@@ -120,7 +120,7 @@ const BairroGrid = () => {
                 </InputContainer>
             </TableFilter>
             <TableGear isGear={isGear}>
-                <ButtonGearMenu >Gerar PDF <FaFilePdf /></ButtonGearMenu>
+                <ButtonGearMenu visible='none' >Gerar PDF <FaFilePdf /></ButtonGearMenu>
                 <ButtonGearMenu onClick={handleExportExcel}>Gerar Planilha <SiMicrosoftexcel /></ButtonGearMenu>
             </TableGear>
             {showDelete && <DeleteItens link={link} id={id} setShowDelete={setShowDelete} />}

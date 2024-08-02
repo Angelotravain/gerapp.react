@@ -10,7 +10,7 @@ import {
     FormContainer,
     FormActionContainer,
 } from '../../../components/form/Form.module';
-import { ButtonForm } from '../../../components/button/Button.module'
+import { ButtonDelete, ButtonForm } from '../../../components/button/Button.module'
 import {
     InputCheck,
     InputContainer,
@@ -27,7 +27,8 @@ import {
     getItens,
     updateItem,
     insertItem,
-    getItensById
+    getItensById,
+    deleteItem
 } from '../../../services/httpRequest';
 import {
     TabsContainer,
@@ -49,6 +50,7 @@ const ClienteForm = () => {
     const [filteredBairros, setFilteredBairros] = useState([]);
     const [enderecos, setEnderecos] = useState([]);
     const [filter, setFilter] = useState('');
+    const [idEndereco, setIdEndereco] = useState(0);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const location = useLocation();
@@ -121,6 +123,26 @@ const ClienteForm = () => {
     const redirectGrid = () => {
         navigate('/Cliente');
     };
+
+    const removeEndereco = async () => {
+        try {
+            if (idEndereco === 0) {
+                setEnderecos(prevEnderecos => prevEnderecos.filter(e => e.id !== idEndereco));
+            } else {
+                let response = await deleteItem({ link: 'Endereco', id: idEndereco });
+
+                if (response === 'Endereço excluido com sucesso!') {
+                    setEnderecos(prevEnderecos => prevEnderecos.filter(e => e.id !== idEndereco));
+                } else {
+                    console.log('Erro ao deletar o item:', response.statusText);
+                }
+            }
+        } catch (error) {
+            console.log('Erro ao deletar o item:', error);
+        }
+    };
+
+
 
     const addEndereco = () => {
         const enderecoNovo = {
@@ -285,12 +307,12 @@ const ClienteForm = () => {
                                 <InputContainer tamanho='50%'>
                                     <Label>Nome</Label>
                                     <Input
-                                        type="text" {...register('nome')} />
+                                        type="text" {...register('nome')} maxLength='80' />
                                 </InputContainer>
                                 <InputContainer tamanho='50%'>
                                     <Label>E-mail</Label>
                                     <Input
-                                        type="text" {...register('email')} />
+                                        type="text" {...register('email')} maxLength='80' />
                                 </InputContainer>
                                 <Controller
                                     name="telefone"
@@ -341,21 +363,21 @@ const ClienteForm = () => {
                         <InputContainer tamanho='40%'>
                             <Label>Logradouro</Label>
                             <Input
-                                type="text" {...register('logradouro')} />
+                                type="text" {...register('logradouro')} maxLength='180' />
                         </InputContainer>
                         <InputContainer tamanho='20%'>
                             <Label>Número</Label>
                             <Input
-                                type="text" {...register('numero')} />
+                                type="text" {...register('numero')} maxLength='10' minLength='1' />
                         </InputContainer>
                         <InputContainer tamanho='100%'>
                             <Label>Complemento</Label>
                             <Input
-                                type="text" {...register('complemento')} />
+                                type="text" {...register('complemento')} maxLength='100' />
                         </InputContainer>
                         <span {...register('bairroId')}></span>
-                        <DivList tamanho='100%'>
-                            <InputContainer tamanho='50%'>
+                        <DivList tamanho='50%'>
+                            <InputContainer tamanho='100%'>
                                 <Label>Bairro</Label>
                                 <Input
                                     type="text" {...register('bairro')} onChange={handleInputChange} />
@@ -370,7 +392,9 @@ const ClienteForm = () => {
                                 </ul>
                             )}
                         </DivList>
-                        <ButtonInterForm onClick={(e) => { e.preventDefault(); addEndereco(); }}>Adicionar endereço</ButtonInterForm>
+                        <InputContainer tamanho='50%'>
+                            <ButtonInterForm onClick={(e) => { e.preventDefault(); addEndereco(); }}>Adicionar endereço</ButtonInterForm>
+                        </InputContainer>
                         <TableFormContainer>
                             <Table>
                                 <thead>
@@ -378,14 +402,16 @@ const ClienteForm = () => {
                                         <Th>Logradouro</Th>
                                         <Th>Número</Th>
                                         <Th>Complemento</Th>
+                                        <Th>Opções</Th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {enderecos.map((endereco) => (
-                                        <tr key={endereco.id} onClick={() => setarEnderecos(endereco)}>
-                                            <Td>{endereco.logradouro}</Td>
-                                            <Td>{endereco.numero}</Td>
-                                            <Td>{endereco.complemento}</Td>
+                                        <tr key={endereco.id}>
+                                            <Td onClick={() => setarEnderecos(endereco)}>{endereco.logradouro}</Td>
+                                            <Td onClick={() => setarEnderecos(endereco)}>{endereco.numero}</Td>
+                                            <Td onClick={() => setarEnderecos(endereco)}>{endereco.complemento}</Td>
+                                            <Td><ButtonDelete onClick={() => { setIdEndereco(endereco.id); removeEndereco(idEndereco); }} /></Td>
                                         </tr>
                                     ))}
                                 </tbody>

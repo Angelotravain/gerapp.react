@@ -110,7 +110,7 @@ export const ButtonGearMenu = styled.button`
     padding: 10px;
     cursor: pointer;
     border: none;
-
+    display: ${props => props.visible || 'block'};
     &:hover{
         background-color: ${props => props.theme.colors.hover};
     }
