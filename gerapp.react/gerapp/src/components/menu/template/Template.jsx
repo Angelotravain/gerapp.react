@@ -25,13 +25,13 @@ const Template = ({ isOpen, toogleOpen }) => {
             </MenuSuperiorNav>
             <ModalMenuDrawer isOpen={isOpen}>
                 <Dropdown title={'Cadastros'} icon={<MdAppRegistration />}>
-                    <LinkCadastrosRedirect />
+                    <LinkCadastrosRedirect setOpen={toogleOpen} />
                 </Dropdown>
                 <Dropdown title={'Financeiro'} icon={<GiCash />}>
-                    <LinkFinanceiroRedirect />
+                    <LinkFinanceiroRedirect setOpen={toogleOpen} />
                 </Dropdown>
                 <Dropdown title={'Locações'} icon={<GrDeliver />}>
-                    <LinkLocacoesRedirect />
+                    <LinkLocacoesRedirect setOpen={toogleOpen} />
                 </Dropdown>
             </ModalMenuDrawer>
             <DivMenuCenter isOpen={isOpen}>

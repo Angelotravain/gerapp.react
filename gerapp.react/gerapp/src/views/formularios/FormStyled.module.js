@@ -44,7 +44,7 @@ export const TabPanel = styled.div`
     display: ${props => props.active ? 'flex' : 'none'};
     flex-wrap: wrap;
             table{
-            width: 80%;
+            width: 100%;
             align-items: center;
         }
         th{

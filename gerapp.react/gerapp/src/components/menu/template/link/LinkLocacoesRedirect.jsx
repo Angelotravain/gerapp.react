@@ -12,16 +12,16 @@ const LinkLocacoesRedirect = () => {
     return (
         <div>
             <DropModalLink>
-                <LinkButtonModal href='/Equipamentos'><FaToolbox /> Equipamentos</LinkButtonModal>
+                <LinkButtonModal to='/Equipamentos' onClick={() => setOpen(false)}><FaToolbox /> Equipamentos</LinkButtonModal>
             </DropModalLink>
             <DropModalLink>
-                <LinkButtonModal href='/Locacao'><FaTable /> Locações</LinkButtonModal>
+                <LinkButtonModal to='/Locacao' onClick={() => setOpen(false)}><FaTable /> Locações</LinkButtonModal>
             </DropModalLink>
             <DropModalLink>
-                <LinkButtonModal href='/TipoEquipamento'><MdOutlineTableRestaurant /> Tipo de equipamentos</LinkButtonModal>
+                <LinkButtonModal to='/TipoEquipamento' onClick={() => setOpen(false)}><MdOutlineTableRestaurant /> Tipo de equipamentos</LinkButtonModal>
             </DropModalLink>
             <DropModalLink>
-                <LinkButtonModal href='/Veiculo'><GrDeliver /> Veículos</LinkButtonModal>
+                <LinkButtonModal to='/Veiculo' onClick={() => setOpen(false)}><GrDeliver /> Veículos</LinkButtonModal>
             </DropModalLink>
         </div>
     )

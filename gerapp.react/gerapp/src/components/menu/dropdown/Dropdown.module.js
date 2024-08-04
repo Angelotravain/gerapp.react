@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { Link } from 'react-router-dom';
 
 export const DropContainer = styled.div`
     display: flex;
@@ -27,14 +28,13 @@ export const DropModal = styled.div`
     display: ${props => props.isOpen ? 'flex' : 'none'};
     flex-direction: column;
 `;
-export const LinkButtonModal = styled.a`
+export const LinkButtonModal = styled(Link)`
     font-size: 1.1rem;
     font-weight: bold;
     gap: 10px;
     color: ${props => props.theme.colors.textColor};
     text-decoration: none;
     margin-left: 20%;
-
 `;
 
 export const DropModalLink = styled.div`

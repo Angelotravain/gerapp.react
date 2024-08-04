@@ -18,6 +18,7 @@ export const InputContainer = styled.div`
 export const ButtonInterForm = styled.button`
     height: 35px;
     margin: 15px;
+    padding: 10px;
     background-color: ${props => props.theme.colors.second};
     border: ${props => props.theme.colors.border};
     transition: border-color 0.3s;

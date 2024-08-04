@@ -10,10 +10,10 @@ const LinkFinanceiroRedirect = () => {
     return (
         <div>
             <DropModalLink>
-                <LinkButtonModal href='/ContasAReceber'><BsPiggyBank /> Contas a receber</LinkButtonModal>
+                <LinkButtonModal to='/ContasAReceber' onClick={() => setOpen(false)}><BsPiggyBank /> Contas a receber</LinkButtonModal>
             </DropModalLink>
             <DropModalLink>
-                <LinkButtonModal href='/FormaPagamento'><MdPix /> Formas de pagamento</LinkButtonModal>
+                <LinkButtonModal to='/FormaPagamento' onClick={() => setOpen(false)}><MdPix /> Formas de pagamento</LinkButtonModal>
             </DropModalLink>
         </div>
     )

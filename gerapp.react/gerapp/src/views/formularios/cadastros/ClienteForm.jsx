@@ -295,52 +295,48 @@ const ClienteForm = () => {
                     </TabList>
 
                     <TabPanel active={activeTab === 0}>
-                        <div>
-                            <div>
-                                <Image imageSrc={imageSrc} alt='Foto do cliente' onClick={handleImageClick} />
-                                <input type="file"
-                                    accept="image/*"
-                                    ref={fileInputRef}
-                                    onChange={handleFileChange}
-                                    style={{ display: 'none' }} />
-                                <span {...register('id')}></span>
-                                <InputContainer tamanho='50%'>
-                                    <Label>Nome</Label>
-                                    <Input
-                                        type="text" {...register('nome')} maxLength='80' />
-                                </InputContainer>
-                                <InputContainer tamanho='50%'>
-                                    <Label>E-mail</Label>
-                                    <Input
-                                        type="text" {...register('email')} maxLength='80' />
-                                </InputContainer>
-                                <Controller
-                                    name="telefone"
-                                    control={control}
-                                    defaultValue=""
-                                    render={({ field }) => (
-                                        <MaskedInput
-                                            maskEdit="(99) 99999-9999"
-                                            value={field.value}
-                                            onChange={field.onChange}
-                                            nameInput='Telefone'
-                                            tamanho='50%'
-                                            label='Telefone'
-                                        />
-                                    )}
+                        <Image imageSrc={imageSrc} alt='Foto do cliente' onClick={handleImageClick} />
+                        <input type="file"
+                            accept="image/*"
+                            ref={fileInputRef}
+                            onChange={handleFileChange}
+                            style={{ display: 'none' }} />
+                        <span {...register('id')}></span>
+                        <InputContainer tamanho='50%'>
+                            <Label>Nome</Label>
+                            <Input
+                                type="text" {...register('nome')} maxLength='80' />
+                        </InputContainer>
+                        <InputContainer tamanho='50%'>
+                            <Label>E-mail</Label>
+                            <Input
+                                type="text" {...register('email')} maxLength='80' />
+                        </InputContainer>
+                        <Controller
+                            name="telefone"
+                            control={control}
+                            defaultValue=""
+                            render={({ field }) => (
+                                <MaskedInput
+                                    maskEdit="(99) 99999-9999"
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                    nameInput='Telefone'
+                                    tamanho='50%'
+                                    label='Telefone'
                                 />
-                                <InputContainer tamanho='20%' display='flex'>
-                                    <Label>Ativo?</Label>
-                                    <InputCheck
-                                        type="checkbox" {...register('statusCliente')} />
-                                </InputContainer>
-                                <InputContainer tamanho='30%'>
-                                    <Label>Data de nascimento</Label>
-                                    <Input
-                                        type="date" {...register('dataNascimento')} />
-                                </InputContainer>
-                            </div>
-                        </div>
+                            )}
+                        />
+                        <InputContainer tamanho='20%' display='flex'>
+                            <Label>Ativo?</Label>
+                            <InputCheck
+                                type="checkbox" {...register('statusCliente')} />
+                        </InputContainer>
+                        <InputContainer tamanho='30%'>
+                            <Label>Data de nascimento</Label>
+                            <Input
+                                type="date" {...register('dataNascimento')} />
+                        </InputContainer>
                     </TabPanel>
                     <TabPanel active={activeTab === 1}>
                         <span {...register('enderecoId')}></span>

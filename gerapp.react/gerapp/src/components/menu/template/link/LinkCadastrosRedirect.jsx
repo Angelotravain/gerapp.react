@@ -9,23 +9,23 @@ import {
     DropModalLink
 } from '../../dropdown/Dropdown.module'
 
-const LinkCadastrosRedirect = () => {
+const LinkCadastrosRedirect = ({ setOpen }) => {
     return (
         <div>
             <DropModalLink>
-                <LinkButtonModal href='/Bairro'><FaStreetView /> Bairros</LinkButtonModal>
+                <LinkButtonModal to='/Bairro' onClick={() => setOpen(false)}><FaStreetView /> Bairros</LinkButtonModal>
             </DropModalLink>
             <DropModalLink>
-                <LinkButtonModal href='/Cargo'><GiPoliceOfficerHead /> Cargos</LinkButtonModal>
+                <LinkButtonModal to='/Cargo' onClick={() => setOpen(false)}><GiPoliceOfficerHead /> Cargos</LinkButtonModal>
             </DropModalLink>
             <DropModalLink>
-                <LinkButtonModal href='/Cliente'><IoMdPeople /> Clientes</LinkButtonModal>
+                <LinkButtonModal to='/Cliente' onClick={() => setOpen(false)}><IoMdPeople /> Clientes</LinkButtonModal>
             </DropModalLink>
             <DropModalLink>
-                <LinkButtonModal href='/Empresa'><MdCorporateFare /> Empresa</LinkButtonModal>
+                <LinkButtonModal to='/Empresa' onClick={() => setOpen(false)}><MdCorporateFare /> Empresa</LinkButtonModal>
             </DropModalLink>
             <DropModalLink>
-                <LinkButtonModal href='/Funcionario'><GrUserManager /> Funcionários</LinkButtonModal>
+                <LinkButtonModal to='/Funcionario' onClick={() => setOpen(false)}><GrUserManager /> Funcionários</LinkButtonModal>
             </DropModalLink>
         </div>
     )

@@ -34,35 +34,33 @@ const MainContainer = styled.div`
 
 const MainRoute = ({ isOpen }) => {
     return (
-        <MainContainer isOpen={isOpen}>
-            <Router>
-                <Routes>
-                    {/* Home */}
-                    <Route path='/' element={<Dashboard />} />
-                    <Route path='/Bairro' element={<BairroGrid />} />
-                    <Route path='/Cliente' element={<ClienteGrid />} />
-                    <Route path='/Funcionario' element={<FuncionarioGrid />} />
-                    <Route path='/Cargo' element={<CargoGrid />} />
-                    <Route path='/Empresa' element={<EmpresaGrid />} />
-                    <Route path='/FormaPagamento' element={<FormaPagamentoGrid />} />
-                    <Route path='/Equipamentos' element={<EquipamentoGrid />} />
-                    <Route path='/TipoEquipamento' element={<TipoEquipamentoGrid />} />
-                    <Route path='/Veiculo' element={<VeiculoGrid />} />
-                    <Route path='/Locacao' element={<LocacoesGrid />} />
-                    <Route path='/ContasAReceber' element={<ContaAReceberGrid />} />
+        <MainContainer>
+            <Routes>
+                {/* Home */}
+                <Route path='/' element={<Dashboard />} />
+                <Route path='/Bairro' element={<BairroGrid />} />
+                <Route path='/Cliente' element={<ClienteGrid />} />
+                <Route path='/Funcionario' element={<FuncionarioGrid />} />
+                <Route path='/Cargo' element={<CargoGrid />} />
+                <Route path='/Empresa' element={<EmpresaGrid />} />
+                <Route path='/FormaPagamento' element={<FormaPagamentoGrid />} />
+                <Route path='/Equipamentos' element={<EquipamentoGrid />} />
+                <Route path='/TipoEquipamento' element={<TipoEquipamentoGrid />} />
+                <Route path='/Veiculo' element={<VeiculoGrid />} />
+                <Route path='/Locacao' element={<LocacoesGrid />} />
+                <Route path='/ContasAReceber' element={<ContaAReceberGrid />} />
 
-                    {/* Rotas de formulário */}
-                    <Route path='/Bairro_form' element={<BairroForm />} />
-                    <Route path='/Cliente_form' element={<ClienteForm />} />
-                    <Route path='/Cargo_form' element={<CargoForm />} />
-                    <Route path='/Empresa_form' element={<EmpresaForm />} />
-                    <Route path='/FormaPagamento_form' element={<FormaPagamentoForm />} />
-                    <Route path='/Veiculo_form' element={<VeiculoForm />} />
-                    <Route path='/TipoEquipamento_form' element={<TipoEquipamentoForm />} />
-                    <Route path='/Equipamento_form' element={<EquipamentoForm />} />
-                    <Route path='/Funcionario_form' element={<FuncionarioForm />} />
-                </Routes>
-            </Router>
+                {/* Rotas de formulário */}
+                <Route path='/Bairro_form' element={<BairroForm />} />
+                <Route path='/Cliente_form' element={<ClienteForm />} />
+                <Route path='/Cargo_form' element={<CargoForm />} />
+                <Route path='/Empresa_form' element={<EmpresaForm />} />
+                <Route path='/FormaPagamento_form' element={<FormaPagamentoForm />} />
+                <Route path='/Veiculo_form' element={<VeiculoForm />} />
+                <Route path='/TipoEquipamento_form' element={<TipoEquipamentoForm />} />
+                <Route path='/Equipamento_form' element={<EquipamentoForm />} />
+                <Route path='/Funcionario_form' element={<FuncionarioForm />} />
+            </Routes>
         </MainContainer>
     );
 };
